@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+        "module": "amd",
+        "target": "es5",
+        "noImplicitAny": false,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "outFile": "build/game.js",
+        "experimentalDecorators": true,
+        "sourceMap": true,
+        "watch": true
+    },
+    "include": [
+        "egret/**/*",
+        "game/**/*"
+    ],
+    "files": [
+        "egret/utils/HashObject.ts",
+        "egret/utils/DataStructure.ts",
+        "egret/events/EventDispatcher.ts",
+        "egret/display/DisplayObject.ts",
+        "egret/filters/Filter.ts",
+        "egret/filters/GlowFilter.ts",
+        "egret/display/Texture.ts",
+        "egret/i18n/tr.ts",
+        "egret/player/nodes/RenderNode.ts",
+        "egret/player/paths/Path2D.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "build"
+    ]
+}
