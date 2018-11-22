@@ -1,0 +1,19 @@
+{
+	"groups": [{
+		"keys": "main_rank_png,main_sign_png,main_start_png",
+		"name": "main"
+	}],
+	"resources": [{
+		"name": "main_rank_png",
+		"type": "image",
+		"url": "assets/main/main_rank.png"
+	}, {
+		"name": "main_sign_png",
+		"type": "image",
+		"url": "assets/main/main_sign.png"
+	}, {
+		"name": "main_start_png",
+		"type": "image",
+		"url": "assets/main/main_start.png"
+	}]
+}

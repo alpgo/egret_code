@@ -148,7 +148,7 @@ namespace egret.web {
      * @private
      * 解析一个节点
      */
-    function parseNode(node:Node, parent:XML):XML {
+    function parseNode(node:any, parent:XML):XML {
         if(node.localName=="parsererror"){
             throw new Error(node.textContent);
         }

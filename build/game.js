@@ -1,7 +1,10 @@
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -169,7 +172,7 @@ var egret;
      * @platform Web,Native
      * @language zh_CN
      */
-    var HashObject = (function () {
+    var HashObject = /** @class */ (function () {
         /**
          * Initializes a HashObject
          * @version Egret 2.4
@@ -321,7 +324,7 @@ var egret;
      * @includeExample egret/events/EventDispatcher.ts
      * @language zh_CN
      */
-    var EventDispatcher = (function (_super) {
+    var EventDispatcher = /** @class */ (function (_super) {
         __extends(EventDispatcher, _super);
         /**
          * create an instance of the EventDispatcher class.
@@ -657,7 +660,7 @@ var egret;
      * @includeExample egret/display/DisplayObject.ts
      * @language zh_CN
      */
-    var DisplayObject = (function (_super) {
+    var DisplayObject = /** @class */ (function (_super) {
         __extends(DisplayObject, _super);
         /**
          * Initializes a DisplayObject object
@@ -2491,7 +2494,7 @@ var egret;
          */
         DisplayObject.prototype.$getConcatenatedMatrixAt = function (root, matrix) {
             var invertMatrix = root.$getInvertedConcatenatedMatrix();
-            if (invertMatrix.a === 0 || invertMatrix.d === 0) {
+            if (invertMatrix.a === 0 || invertMatrix.d === 0) { //缩放值为0，逆矩阵无效
                 var target = this;
                 var rootLevel = root.$nestLevel;
                 matrix.identity();
@@ -2523,14 +2526,14 @@ var egret;
                 return null;
             }
             var m = self.$getInvertedConcatenatedMatrix();
-            if (m.a == 0 && m.b == 0 && m.c == 0 && m.d == 0) {
+            if (m.a == 0 && m.b == 0 && m.c == 0 && m.d == 0) { //防止父类影响子类
                 return null;
             }
             var bounds = self.$getContentBounds();
             var localX = m.a * stageX + m.c * stageY + m.tx;
             var localY = m.b * stageX + m.d * stageY + m.ty;
             if (bounds.contains(localX, localY)) {
-                if (!self.$children) {
+                if (!self.$children) { //容器已经检查过scrollRect和mask，避免重复对遮罩进行碰撞。
                     var rect = self.$scrollRect ? self.$scrollRect : self.$maskRect;
                     if (rect && !rect.contains(localX, localY)) {
                         return null;
@@ -2812,7 +2815,7 @@ var egret;
      * @version Egret 2.4
      * @platform Web,Native
      */
-    var Filter = (function (_super) {
+    var Filter = /** @class */ (function (_super) {
         __extends(Filter, _super);
         function Filter() {
             var _this = _super.call(this) || this;
@@ -2905,7 +2908,7 @@ var egret;
      * @version Egret 3.1.4
      * @platform Web,Native
      */
-    var GlowFilter = (function (_super) {
+    var GlowFilter = /** @class */ (function (_super) {
         __extends(GlowFilter, _super);
         /**
          * Initializes a new GlowFilter instance.
@@ -3262,7 +3265,7 @@ var egret;
      * @includeExample egret/display/Texture.ts
      * @language zh_CN
      */
-    var Texture = (function (_super) {
+    var Texture = /** @class */ (function (_super) {
         __extends(Texture, _super);
         /**
          * Create an egret.Texture object
@@ -3711,7 +3714,7 @@ var egret;
          * @private
          * 渲染节点基类
          */
-        var RenderNode = (function () {
+        var RenderNode = /** @class */ (function () {
             function RenderNode() {
                 /**
                  * 节点类型..
@@ -3807,7 +3810,7 @@ var egret;
          * @private
          * 2D路径
          */
-        var Path2D = (function () {
+        var Path2D = /** @class */ (function () {
             function Path2D() {
                 /**
                  * 路径类型
@@ -4138,7 +4141,7 @@ var egret;
      * @includeExample egret/display/Bitmap.ts
      * @language zh_CN
      */
-    var Bitmap = (function (_super) {
+    var Bitmap = /** @class */ (function (_super) {
         __extends(Bitmap, _super);
         /**
          * Initializes a Bitmap object to refer to the specified Texture object.
@@ -4720,7 +4723,7 @@ var egret;
      * @platform Web,Native
      * @language zh_CN
      */
-    var BitmapData = (function (_super) {
+    var BitmapData = /** @class */ (function (_super) {
         __extends(BitmapData, _super);
         /**
          * Initializes a BitmapData object to refer to the specified source object.
@@ -5052,7 +5055,7 @@ var egret;
      * @see http://edn.egret.com/cn/docs/page/108 显示容器的概念与实现
      * @language zh_CN
      */
-    var BlendMode = (function () {
+    var BlendMode = /** @class */ (function () {
         function BlendMode() {
         }
         /**
@@ -5266,7 +5269,7 @@ var egret;
      * @includeExample egret/display/DisplayObjectContainer.ts
      * @language zh_CN
      */
-    var DisplayObjectContainer = (function (_super) {
+    var DisplayObjectContainer = /** @class */ (function (_super) {
         __extends(DisplayObjectContainer, _super);
         /**
          * Creates a new DisplayObjectContainer instance.
@@ -5396,7 +5399,7 @@ var egret;
                 self.$nativeDisplayObject.addChildAt(child.$nativeDisplayObject.id, index);
             }
             var stage = self.$stage;
-            if (stage) {
+            if (stage) { //当前容器在舞台
                 child.$onAddToStage(stage, self.$nestLevel + 1);
             }
             if (notifyListeners) {
@@ -5619,7 +5622,7 @@ var egret;
             if (notifyListeners) {
                 child.dispatchEventWith(egret.Event.REMOVED, true);
             }
-            if (this.$stage) {
+            if (this.$stage) { //在舞台上
                 child.$onRemoveFromStage();
                 var list = DisplayObjectContainer.$EVENT_REMOVE_FROM_STAGE_LIST;
                 while (list.length > 0) {
@@ -6051,7 +6054,7 @@ var egret;
      * @platform Web,Native
      * @language zh_CN
      */
-    var GradientType = (function () {
+    var GradientType = /** @class */ (function () {
         function GradientType() {
         }
         /**
@@ -6223,7 +6226,7 @@ var egret;
      * @includeExample egret/display/Graphics.ts
      * @language zh_CN
      */
-    var Graphics = (function (_super) {
+    var Graphics = /** @class */ (function (_super) {
         __extends(Graphics, _super);
         /**
          * Initializes a Graphics object.
@@ -7145,7 +7148,7 @@ var egret;
     /**
      * @private
      */
-    var Mesh = (function (_super) {
+    var Mesh = /** @class */ (function (_super) {
         __extends(Mesh, _super);
         function Mesh(value) {
             var _this = _super.call(this, value) || this;
@@ -7346,7 +7349,7 @@ var egret;
      * @includeExample egret/display/RenderTexture.ts
      * @language zh_CN
      */
-    var RenderTexture = (function (_super) {
+    var RenderTexture = /** @class */ (function (_super) {
         __extends(RenderTexture, _super);
         function RenderTexture() {
             var _this = _super.call(this) || this;
@@ -7501,7 +7504,7 @@ var egret;
      * @includeExample egret/display/Shape.ts
      * @language zh_CN
      */
-    var Shape = (function (_super) {
+    var Shape = /** @class */ (function (_super) {
         __extends(Shape, _super);
         /**
          * Creates a new Shape object.
@@ -7613,7 +7616,7 @@ var egret;
      * @includeExample egret/display/Sprite.ts
      * @language zh_CN
      */
-    var Sprite = (function (_super) {
+    var Sprite = /** @class */ (function (_super) {
         __extends(Sprite, _super);
         /**
          * Creates a new Sprite instance.
@@ -7776,7 +7779,7 @@ var egret;
      * @includeExample egret/display/SpriteSheet.ts
      * @language zh_CN
      */
-    var SpriteSheet = (function (_super) {
+    var SpriteSheet = /** @class */ (function (_super) {
         __extends(SpriteSheet, _super);
         /**
          * Create an egret.SpriteSheet object
@@ -7957,7 +7960,7 @@ var egret;
      * @includeExample egret/display/Stage.ts
      * @language zh_CN
      */
-    var Stage = (function (_super) {
+    var Stage = /** @class */ (function (_super) {
         __extends(Stage, _super);
         /**
          * @private
@@ -8304,7 +8307,7 @@ var egret;
      * @see http://edn.egret.com/cn/docs/page/798 取消触摸事件
      * @language zh_CN
      */
-    var Event = (function (_super) {
+    var Event = /** @class */ (function (_super) {
         __extends(Event, _super);
         /**
          * Creates an Event object to pass as a parameter to event listeners.
@@ -9129,7 +9132,7 @@ var egret;
      * @platform Web,Native
      * @language zh_CN
      */
-    var FocusEvent = (function (_super) {
+    var FocusEvent = /** @class */ (function (_super) {
         __extends(FocusEvent, _super);
         /**
          * Create a egret.FocusEvent objects
@@ -9231,7 +9234,7 @@ var egret;
      * @see http://edn.egret.com/cn/docs/page/662 获取位置信息
      * @language zh_CN
      */
-    var GeolocationEvent = (function (_super) {
+    var GeolocationEvent = /** @class */ (function (_super) {
         __extends(GeolocationEvent, _super);
         function GeolocationEvent() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -9310,7 +9313,7 @@ var egret;
      * @platform Web,Native
      * @language zh_CN
      */
-    var HTTPStatusEvent = (function (_super) {
+    var HTTPStatusEvent = /** @class */ (function (_super) {
         __extends(HTTPStatusEvent, _super);
         /**
          * Create a egret.HTTPStatusEvent objects
@@ -9471,7 +9474,7 @@ var egret;
      * @includeExample egret/events/IOErrorEvent.ts
      * @language zh_CN
      */
-    var IOErrorEvent = (function (_super) {
+    var IOErrorEvent = /** @class */ (function (_super) {
         __extends(IOErrorEvent, _super);
         /**
          * Create a egret.IOErrorEvent objects
@@ -9581,7 +9584,7 @@ var egret;
      * @includeExample egret/sensor/Motion.ts
      * @language zh_CN
      */
-    var MotionEvent = (function (_super) {
+    var MotionEvent = /** @class */ (function (_super) {
         __extends(MotionEvent, _super);
         function MotionEvent() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -9638,7 +9641,7 @@ var egret;
      * @includeExample egret/sensor/DeviceOrientation.ts
      * @language zh_CN
      */
-    var OrientationEvent = (function (_super) {
+    var OrientationEvent = /** @class */ (function (_super) {
         __extends(OrientationEvent, _super);
         function OrientationEvent() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -9691,7 +9694,7 @@ var egret;
      * @platform Web,Native
      * @language zh_CN
      */
-    var ProgressEvent = (function (_super) {
+    var ProgressEvent = /** @class */ (function (_super) {
         __extends(ProgressEvent, _super);
         /**
          * 创建一个 egret.ProgressEvent 对象
@@ -9855,7 +9858,7 @@ var egret;
      * @includeExample egret/events/StageOrientationEvent.ts
      * @language zh_CN
      */
-    var StageOrientationEvent = (function (_super) {
+    var StageOrientationEvent = /** @class */ (function (_super) {
         __extends(StageOrientationEvent, _super);
         /**
          * Creating contains specific information related to the event and the stage direction of StageOrientationEvent object.
@@ -9968,7 +9971,7 @@ var egret;
      * @includeExample egret/events/TextEvent.ts
      * @language zh_CN
      */
-    var TextEvent = (function (_super) {
+    var TextEvent = /** @class */ (function (_super) {
         __extends(TextEvent, _super);
         /**
          * TextEvent create an object that contains information about text events.
@@ -10086,7 +10089,7 @@ var egret;
      * @includeExample egret/events/TimerEvent.ts
      * @language zh_CN
      */
-    var TimerEvent = (function (_super) {
+    var TimerEvent = /** @class */ (function (_super) {
         __extends(TimerEvent, _super);
         /**
          * Creates an Event object with specific information relevant to timer events.
@@ -10266,7 +10269,7 @@ var egret;
      * @includeExample egret/geom/Point.ts
      * @language zh_CN
      */
-    var Point = (function (_super) {
+    var Point = /** @class */ (function (_super) {
         __extends(Point, _super);
         /**
          * Creates a new point. If you pass no parameters to this method, a point is created at (0,0).
@@ -10657,7 +10660,7 @@ var egret;
      * @includeExample egret/events/TouchEvent.ts
      * @language zh_CN
      */
-    var TouchEvent = (function (_super) {
+    var TouchEvent = /** @class */ (function (_super) {
         __extends(TouchEvent, _super);
         /**
          * Creates an Event object that contains information about touch events.
@@ -11022,7 +11025,7 @@ var egret;
         /**
          * @private
          */
-        var WebExternalInterface = (function () {
+        var WebExternalInterface = /** @class */ (function () {
             function WebExternalInterface() {
             }
             /**
@@ -11055,7 +11058,7 @@ var egret;
         /**
          * @private
          */
-        var NativeExternalInterface = (function () {
+        var NativeExternalInterface = /** @class */ (function () {
             function NativeExternalInterface() {
             }
             NativeExternalInterface.call = function (functionName, value) {
@@ -11100,7 +11103,7 @@ var egret;
         /**
          * @private
          */
-        var WebViewExternalInterface = (function () {
+        var WebViewExternalInterface = /** @class */ (function () {
             function WebViewExternalInterface() {
             }
             WebViewExternalInterface.call = function (functionName, value) {
@@ -11233,7 +11236,7 @@ var egret;
      * @see http://edn.egret.com/cn/docs/page/947#模糊滤镜 模糊滤镜
      * @language zh_CN
      */
-    var BlurFilter = (function (_super) {
+    var BlurFilter = /** @class */ (function (_super) {
         __extends(BlurFilter, _super);
         /**
          * Initializes a BlurFilter object.
@@ -11349,7 +11352,7 @@ var egret;
         return BlurFilter;
     }(egret.Filter));
     egret.BlurFilter = BlurFilter;
-    var BlurXFilter = (function (_super) {
+    var BlurXFilter = /** @class */ (function (_super) {
         __extends(BlurXFilter, _super);
         function BlurXFilter(blurX) {
             if (blurX === void 0) { blurX = 4; }
@@ -11376,7 +11379,7 @@ var egret;
         });
         return BlurXFilter;
     }(egret.Filter));
-    var BlurYFilter = (function (_super) {
+    var BlurYFilter = /** @class */ (function (_super) {
         __extends(BlurYFilter, _super);
         function BlurYFilter(blurY) {
             if (blurY === void 0) { blurY = 4; }
@@ -11450,7 +11453,7 @@ var egret;
      * @see http://edn.egret.com/cn/docs/page/947 颜色矩阵滤镜
      * @language zh_CN
      */
-    var ColorMatrixFilter = (function (_super) {
+    var ColorMatrixFilter = /** @class */ (function (_super) {
         __extends(ColorMatrixFilter, _super);
         /**
          * Initializes a ColorMatrixFilter object.
@@ -11631,7 +11634,7 @@ var egret;
      * @platform Web
      * @language zh_CN
      */
-    var CustomFilter = (function (_super) {
+    var CustomFilter = /** @class */ (function (_super) {
         __extends(CustomFilter, _super);
         /**
          * Initialize the CustomFilter object.
@@ -11763,7 +11766,7 @@ var egret;
      * @version Egret 3.1.4
      * @platform Web,Native
      */
-    var DropShadowFilter = (function (_super) {
+    var DropShadowFilter = /** @class */ (function (_super) {
         __extends(DropShadowFilter, _super);
         /**
          * Initializes a new DropShadowFilter instance.
@@ -12000,7 +12003,7 @@ var egret;
      * @includeExample egret/geom/Matrix.ts
      * @language zh_CN
      */
-    var Matrix = (function (_super) {
+    var Matrix = /** @class */ (function (_super) {
         __extends(Matrix, _super);
         /**
          * Creates a new Matrix object with the specified parameters.
@@ -12806,7 +12809,7 @@ var egret;
      * @includeExample egret/geom/Rectangle.ts
      * @language zh_CN
      */
-    var Rectangle = (function (_super) {
+    var Rectangle = /** @class */ (function (_super) {
         __extends(Rectangle, _super);
         /**
          * Creates a new Rectangle object with the top-left corner specified by the x and y parameters and with the specified
@@ -13877,7 +13880,7 @@ var egret;
          * @private
          * @inheritDoc
          */
-        var HtmlSound = (function (_super) {
+        var HtmlSound = /** @class */ (function (_super) {
             __extends(HtmlSound, _super);
             /**
              * @private
@@ -13915,11 +13918,11 @@ var egret;
                 audio.addEventListener("canplaythrough", onAudioLoaded);
                 audio.addEventListener("error", onAudioError);
                 var ua = navigator.userAgent.toLowerCase();
-                if (ua.indexOf("firefox") >= 0) {
+                if (ua.indexOf("firefox") >= 0) { //火狐兼容
                     audio.autoplay = !0;
                     audio.muted = true;
                 }
-                if (ua.indexOf("edge") >= 0) {
+                if (ua.indexOf("edge") >= 0) { //Edge兼容
                     document.body.appendChild(audio);
                 }
                 audio.load();
@@ -13930,7 +13933,7 @@ var egret;
                 function onAudioLoaded() {
                     HtmlSound.$recycle(this.url, audio);
                     removeListeners();
-                    if (ua.indexOf("firefox") >= 0) {
+                    if (ua.indexOf("firefox") >= 0) { //火狐兼容
                         audio.pause();
                         audio.muted = false;
                     }
@@ -13944,7 +13947,7 @@ var egret;
                 function removeListeners() {
                     audio.removeEventListener("canplaythrough", onAudioLoaded);
                     audio.removeEventListener("error", onAudioError);
-                    if (ua.indexOf("edge") >= 0) {
+                    if (ua.indexOf("edge") >= 0) { //Edge兼容
                         document.body.removeChild(audio);
                     }
                 }
@@ -14080,7 +14083,7 @@ var egret;
          * @private
          * @inheritDoc
          */
-        var HtmlSoundChannel = (function (_super) {
+        var HtmlSoundChannel = /** @class */ (function (_super) {
             __extends(HtmlSoundChannel, _super);
             /**
              * @private
@@ -14249,7 +14252,7 @@ var egret;
         /**
          * @private
          */
-        var WebAudioDecode = (function () {
+        var WebAudioDecode = /** @class */ (function () {
             function WebAudioDecode() {
             }
             /**
@@ -14296,7 +14299,7 @@ var egret;
          * @private
          * @inheritDoc
          */
-        var WebAudioSound = (function (_super) {
+        var WebAudioSound = /** @class */ (function (_super) {
             __extends(WebAudioSound, _super);
             /**
              * @private
@@ -14334,9 +14337,9 @@ var egret;
                 request.open("GET", url, true);
                 request.responseType = "arraybuffer";
                 request.onreadystatechange = function () {
-                    if (request.readyState == 4) {
+                    if (request.readyState == 4) { // 4 = "loaded"
                         var ioError = (request.status >= 400 || request.status == 0);
-                        if (ioError) {
+                        if (ioError) { //请求错误
                             self.dispatchEventWith(egret.IOErrorEvent.IO_ERROR);
                         }
                         else {
@@ -14450,7 +14453,7 @@ var egret;
          * @private
          * @inheritDoc
          */
-        var WebAudioSoundChannel = (function (_super) {
+        var WebAudioSoundChannel = /** @class */ (function (_super) {
             __extends(WebAudioSoundChannel, _super);
             /**
              * @private
@@ -14624,7 +14627,7 @@ var egret;
          * @private
          * @inheritDoc
          */
-        var WebVideo = (function (_super) {
+        var WebVideo = /** @class */ (function (_super) {
             __extends(WebVideo, _super);
             /**
              * @inheritDoc
@@ -15104,7 +15107,7 @@ var egret;
              */
             WebVideo.prototype.$setHeight = function (value) {
                 this.heightSet = value;
-                if (this.paused) {
+                if (this.paused) { // 在暂停和播放结束后，修改视频大小时，没有重绘导致的bug
                     var self_2 = this;
                     this.$renderDirty = true;
                     window.setTimeout(function () {
@@ -15119,7 +15122,7 @@ var egret;
              */
             WebVideo.prototype.$setWidth = function (value) {
                 this.widthSet = value;
-                if (this.paused) {
+                if (this.paused) { // 在暂停和播放结束后，修改视频大小时，没有重绘导致的bug
                     var self_3 = this;
                     this.$renderDirty = true;
                     window.setTimeout(function () {
@@ -15308,7 +15311,7 @@ var egret;
      * @platform Web,Native
      * @language zh_CN
      */
-    var HttpResponseType = (function () {
+    var HttpResponseType = /** @class */ (function () {
         function HttpResponseType() {
         }
         /**
@@ -15407,7 +15410,7 @@ var egret;
         /**
          * @private
          */
-        var WebHttpRequest = (function (_super) {
+        var WebHttpRequest = /** @class */ (function (_super) {
             __extends(WebHttpRequest, _super);
             /**
              * @private
@@ -15582,12 +15585,12 @@ var egret;
              */
             WebHttpRequest.prototype.onReadyStateChange = function () {
                 var xhr = this._xhr;
-                if (xhr.readyState == 4) {
+                if (xhr.readyState == 4) { // 4 = "loaded"
                     var ioError_1 = (xhr.status >= 400 || xhr.status == 0);
                     var url_1 = this._url;
                     var self_4 = this;
                     window.setTimeout(function () {
-                        if (ioError_1) {
+                        if (ioError_1) { //请求错误
                             if (DEBUG && !self_4.hasEventListener(egret.IOErrorEvent.IO_ERROR)) {
                                 egret.$error(1011, url_1);
                             }
@@ -15650,7 +15653,7 @@ var egret;
          * @private
          * ImageLoader 类可用于加载图像（JPG、PNG 或 GIF）文件。使用 load() 方法来启动加载。被加载的图像对象数据将存储在 ImageLoader.data 属性上 。
          */
-        var WebImageLoader = (function (_super) {
+        var WebImageLoader = /** @class */ (function (_super) {
             __extends(WebImageLoader, _super);
             function WebImageLoader() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -15701,7 +15704,7 @@ var egret;
                     && url.indexOf("wxLocalResource:") != 0 //微信专用不能使用 blob
                     && url.indexOf("data:") != 0
                     && url.indexOf("http:") != 0
-                    && url.indexOf("https:") != 0) {
+                    && url.indexOf("https:") != 0) { //如果是base64编码或跨域访问的图片，直接使用Image.src解析。
                     var request = this.request;
                     if (!request) {
                         request = this.request = new egret.web.WebHttpRequest();
@@ -15865,7 +15868,7 @@ var egret;
          * @private
          * 显示列表
          */
-        var DisplayList = (function (_super) {
+        var DisplayList = /** @class */ (function (_super) {
             __extends(DisplayList, _super);
             /**
              * @private
@@ -15939,13 +15942,13 @@ var egret;
                 var drawCalls = 0;
                 this.$canvasScaleX = this.offsetMatrix.a = DisplayList.$canvasScaleX;
                 this.$canvasScaleY = this.offsetMatrix.d = DisplayList.$canvasScaleY;
-                if (!this.isStage) {
+                if (!this.isStage) { //对非舞台画布要根据目标显示对象尺寸改变而改变。
                     this.changeSurfaceSize();
                 }
                 var buffer = this.renderBuffer;
                 buffer.clear();
                 drawCalls = sys.systemRenderer.render(this.root, buffer, this.offsetMatrix);
-                if (!this.isStage) {
+                if (!this.isStage) { //对非舞台画布要保存渲染节点。
                     var surface = buffer.surface;
                     var renderNode = this.$renderNode;
                     renderNode.drawData.length = 0;
@@ -16111,7 +16114,7 @@ var egret;
          * @private
          * Egret播放器
          */
-        var Player = (function (_super) {
+        var Player = /** @class */ (function (_super) {
             __extends(Player, _super);
             /**
              * @private
@@ -16325,7 +16328,7 @@ var egret;
             }
             fpsDisplay.updateError(info);
         };
-        var FPSImpl = (function () {
+        var FPSImpl = /** @class */ (function () {
             function FPSImpl(stage, showFPS, showLog, logFilter, styles) {
                 this.showFPS = showFPS;
                 this.showLog = showLog;
@@ -16614,7 +16617,7 @@ var egret;
          * @private
          * 屏幕适配器默认实现，开发者可以实现自定义规则的屏幕适配器。并在初始化加载时将适配器的实例赋值给egret.sys.screenAdapter上，从而替换掉默认适配器。
          */
-        var DefaultScreenAdapter = (function (_super) {
+        var DefaultScreenAdapter = /** @class */ (function (_super) {
             __extends(DefaultScreenAdapter, _super);
             /**
              * @private
@@ -16755,7 +16758,7 @@ var egret;
      * @includeExample egret/player/StageScaleMode.ts
      * @language zh_CN
      */
-    var StageScaleMode = (function () {
+    var StageScaleMode = /** @class */ (function () {
         function StageScaleMode() {
         }
         /**
@@ -16933,7 +16936,7 @@ var egret;
         /**
          * Egret心跳计时器
          */
-        var SystemTicker = (function () {
+        var SystemTicker = /** @class */ (function () {
             /**
              * @private
              */
@@ -17037,7 +17040,7 @@ var egret;
                 var thisObjectList = this.thisObjectList;
                 for (var i = callBackList.length - 1; i >= 0; i--) {
                     if (callBackList[i] == callBack &&
-                        thisObjectList[i] == thisObject) {
+                        thisObjectList[i] == thisObject) { //这里不能用===，因为有可能传入undefined和null.
                         return i;
                     }
                 }
@@ -17258,7 +17261,7 @@ var egret;
          */
         lifecycle.contexts = [];
         var isActivate = true;
-        var LifecycleContext = (function () {
+        var LifecycleContext = /** @class */ (function () {
             function LifecycleContext() {
             }
             LifecycleContext.prototype.pause = function () {
@@ -17333,7 +17336,7 @@ var egret;
          * @private
          * 用户交互操作管理器
          */
-        var TouchHandler = (function (_super) {
+        var TouchHandler = /** @class */ (function (_super) {
             __extends(TouchHandler, _super);
             /**
              * @private
@@ -17478,7 +17481,7 @@ var egret;
          * @private
          * 位图渲染节点
          */
-        var BitmapNode = (function (_super) {
+        var BitmapNode = /** @class */ (function (_super) {
             __extends(BitmapNode, _super);
             function BitmapNode() {
                 var _this = _super.call(this) || this;
@@ -17712,7 +17715,7 @@ var egret;
          * @private
          * 矢量渲染节点
          */
-        var GraphicsNode = (function (_super) {
+        var GraphicsNode = /** @class */ (function (_super) {
             __extends(GraphicsNode, _super);
             function GraphicsNode() {
                 var _this = _super.call(this) || this;
@@ -17881,7 +17884,7 @@ var egret;
          * @private
          * 组渲染节点,用于组合多个渲染节点
          */
-        var GroupNode = (function (_super) {
+        var GroupNode = /** @class */ (function (_super) {
             __extends(GroupNode, _super);
             function GroupNode() {
                 var _this = _super.call(this) || this;
@@ -17950,7 +17953,7 @@ var egret;
          * @private
          * Mesh 渲染节点
          */
-        var MeshNode = (function (_super) {
+        var MeshNode = /** @class */ (function (_super) {
             __extends(MeshNode, _super);
             function MeshNode() {
                 var _this = _super.call(this) || this;
@@ -18044,7 +18047,7 @@ var egret;
          * @private
          * 位图渲染节点
          */
-        var NormalBitmapNode = (function (_super) {
+        var NormalBitmapNode = /** @class */ (function (_super) {
             __extends(NormalBitmapNode, _super);
             function NormalBitmapNode() {
                 var _this = _super.call(this) || this;
@@ -18154,7 +18157,7 @@ var egret;
          * @private
          * 文本渲染节点
          */
-        var TextNode = (function (_super) {
+        var TextNode = /** @class */ (function (_super) {
             __extends(TextNode, _super);
             function TextNode() {
                 var _this = _super.call(this) || this;
@@ -18259,7 +18262,7 @@ var egret;
          * @private
          * 填充路径
          */
-        var FillPath = (function (_super) {
+        var FillPath = /** @class */ (function (_super) {
             __extends(FillPath, _super);
             function FillPath() {
                 var _this = _super.call(this) || this;
@@ -18307,7 +18310,7 @@ var egret;
          * @private
          * 渐变填充路径
          */
-        var GradientFillPath = (function (_super) {
+        var GradientFillPath = /** @class */ (function (_super) {
             __extends(GradientFillPath, _super);
             function GradientFillPath() {
                 var _this = _super.call(this) || this;
@@ -18356,7 +18359,7 @@ var egret;
          * 线条路径。
          * 注意：当线条宽度（lineWidth）为1或3像素时，需要特殊处理，往右下角偏移0.5像素，以显示清晰锐利的线条。
          */
-        var StrokePath = (function (_super) {
+        var StrokePath = /** @class */ (function (_super) {
             __extends(StrokePath, _super);
             function StrokePath() {
                 var _this = _super.call(this) || this;
@@ -18404,7 +18407,7 @@ var egret;
     var CAPS_STYLES = { none: 'butt', square: 'square', round: 'round' };
     var renderBufferPool = []; //渲染缓冲区对象池
     var renderBufferPool_Filters = []; //滤镜缓冲区对象池
-    var CanvasRenderer = (function () {
+    var CanvasRenderer = /** @class */ (function () {
         function CanvasRenderer() {
             this.nestLevel = 0; //渲染的嵌套层次，0表示在调用堆栈的最外层。
             this.renderingMask = false;
@@ -18698,7 +18701,7 @@ var egret;
             }
             var displayBuffer = this.createRenderBuffer(displayBoundsWidth, displayBoundsHeight);
             var displayContext = displayBuffer.context;
-            if (!displayContext) {
+            if (!displayContext) { //RenderContext创建失败，放弃绘制遮罩。
                 drawCalls += this.drawDisplayObject(displayObject, context, offsetX, offsetY);
                 return drawCalls;
             }
@@ -19626,7 +19629,7 @@ var egret;
         /**
          * @private
          */
-        var WebDeviceOrientation = (function (_super) {
+        var WebDeviceOrientation = /** @class */ (function (_super) {
             __extends(WebDeviceOrientation, _super);
             function WebDeviceOrientation() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -19669,7 +19672,7 @@ var egret;
         /**
          * @private
          */
-        var WebGeolocation = (function (_super) {
+        var WebGeolocation = /** @class */ (function (_super) {
             __extends(WebGeolocation, _super);
             /**
              * @private
@@ -19743,7 +19746,7 @@ var egret;
         /**
          * @private
          */
-        var WebMotion = (function (_super) {
+        var WebMotion = /** @class */ (function (_super) {
             __extends(WebMotion, _super);
             function WebMotion() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -19907,7 +19910,7 @@ var egret;
      * @includeExample egret/system/Capabilities.ts
      * @language zh_CN
      */
-    var Capabilities = (function () {
+    var Capabilities = /** @class */ (function () {
         function Capabilities() {
         }
         /**
@@ -20225,7 +20228,7 @@ var egret;
      * @includeExample egret/text/BitmapFont.ts
      * @language zh_CN
      */
-    var BitmapFont = (function (_super) {
+    var BitmapFont = /** @class */ (function (_super) {
         __extends(BitmapFont, _super);
         /**
          * Create an egret.BitmapFont object
@@ -20421,7 +20424,7 @@ var egret;
      * @includeExample egret/text/BitmapText.ts
      * @language zh_CN
      */
-    var BitmapText = (function (_super) {
+    var BitmapText = /** @class */ (function (_super) {
         __extends(BitmapText, _super);
         /**
          * Create an egret.BitmapText object
@@ -21136,7 +21139,7 @@ var egret;
      * @platform Web,Native
      * @language zh_CN
      */
-    var HorizontalAlign = (function () {
+    var HorizontalAlign = /** @class */ (function () {
         function HorizontalAlign() {
         }
         /**
@@ -21264,7 +21267,7 @@ var egret;
      * @includeExample egret/text/HtmlTextParser.ts
      * @language zh_CN
      */
-    var HtmlTextParser = (function () {
+    var HtmlTextParser = /** @class */ (function () {
         /**
          * @version Egret 2.4
          * @platform Web,Native
@@ -21333,7 +21336,7 @@ var egret;
                         egret.$error(1038);
                         fontEnd = starIdx;
                     }
-                    else if (htmltext.charAt(starIdx + 1) == "\/") {
+                    else if (htmltext.charAt(starIdx + 1) == "\/") { //关闭
                         this.stackArray.pop();
                     }
                     else {
@@ -21506,6 +21509,34 @@ var egret;
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-present, Egret Technology.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
 var egret;
 (function (egret) {
     /**
@@ -21513,7 +21544,7 @@ var egret;
      * @version Egret 2.4
      * @platform Web,Native
      */
-    var InputController = (function (_super) {
+    var InputController = /** @class */ (function (_super) {
         __extends(InputController, _super);
         /**
          * @version Egret 2.4
@@ -21677,7 +21708,7 @@ var egret;
             var isChanged = false;
             var reg;
             var result;
-            if (values[35 /* restrictAnd */] != null) {
+            if (values[35 /* restrictAnd */] != null) { //内匹配
                 reg = new RegExp("[" + values[35 /* restrictAnd */] + "]", "g");
                 result = textValue.match(reg);
                 if (result) {
@@ -21688,7 +21719,7 @@ var egret;
                 }
                 isChanged = true;
             }
-            if (values[36 /* restrictNot */] != null) {
+            if (values[36 /* restrictNot */] != null) { //外匹配
                 reg = new RegExp("[^" + values[36 /* restrictNot */] + "]", "g");
                 result = textValue.match(reg);
                 if (result) {
@@ -21749,34 +21780,6 @@ var egret;
     }(egret.HashObject));
     egret.InputController = InputController;
 })(egret || (egret = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-present, Egret Technology.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-present, Egret Technology.
@@ -22044,7 +22047,7 @@ var egret;
      * @includeExample egret/text/TextField.ts
      * @language zh_CN
      */
-    var TextField = (function (_super) {
+    var TextField = /** @class */ (function (_super) {
         __extends(TextField, _super);
         /**
          * @version Egret 2.4
@@ -22516,7 +22519,7 @@ var egret;
                 if (egret.nativeRender) {
                     this.$nativeDisplayObject.setType(value);
                 }
-                if (value == egret.TextFieldType.INPUT) {
+                if (value == egret.TextFieldType.INPUT) { //input，如果没有设置过宽高，则设置默认值为100，30
                     if (isNaN(values[3 /* textFieldWidth */])) {
                         this.$setWidth(100);
                     }
@@ -23736,7 +23739,7 @@ var egret;
                     }
                     else {
                         var w = measureTextWidth(textArr[j], values, element.style);
-                        if (isNaN(textFieldWidth)) {
+                        if (isNaN(textFieldWidth)) { //没有设置过宽
                             lineW += w;
                             lineCharNum += textArr[j].length;
                             lineElement.elements.push({
@@ -23749,7 +23752,7 @@ var egret;
                             }
                         }
                         else {
-                            if (lineW + w <= textFieldWidth) {
+                            if (lineW + w <= textFieldWidth) { //在设置范围内
                                 lineElement.elements.push({
                                     width: w,
                                     text: textArr[j],
@@ -23778,10 +23781,11 @@ var egret;
                                     // detect 4 bytes unicode, refer https://mths.be/punycode
                                     var codeLen = words[k].length;
                                     var has4BytesUnicode = false;
-                                    if (codeLen == 1 && k < wl - 1) {
+                                    if (codeLen == 1 && k < wl - 1) // when there is 2 bytes high surrogate
+                                     {
                                         var charCodeHigh = words[k].charCodeAt(0);
                                         var charCodeLow = words[k + 1].charCodeAt(0);
-                                        if (charCodeHigh >= 0xD800 && charCodeHigh <= 0xDBFF && (charCodeLow & 0xFC00) == 0xDC00) {
+                                        if (charCodeHigh >= 0xD800 && charCodeHigh <= 0xDBFF && (charCodeLow & 0xFC00) == 0xDC00) { // low
                                             var realWord = words[k] + words[k + 1];
                                             codeLen = 2;
                                             has4BytesUnicode = true;
@@ -23798,16 +23802,17 @@ var egret;
                                     if (lineW != 0 && lineW + w > textFieldWidth && lineW + k != 0) {
                                         break;
                                     }
-                                    if (ww + w > textFieldWidth) {
+                                    if (ww + w > textFieldWidth) { //纯英文，一个词就超出宽度的情况
                                         var words2 = words[k].match(/./g);
                                         for (var k2 = 0, wl2 = words2.length; k2 < wl2; k2++) {
                                             // detect 4 bytes unicode, refer https://mths.be/punycode
                                             var codeLen = words2[k2].length;
                                             var has4BytesUnicode2 = false;
-                                            if (codeLen == 1 && k2 < wl2 - 1) {
+                                            if (codeLen == 1 && k2 < wl2 - 1) // when there is 2 bytes high surrogate
+                                             {
                                                 var charCodeHigh = words2[k2].charCodeAt(0);
                                                 var charCodeLow = words2[k2 + 1].charCodeAt(0);
-                                                if (charCodeHigh >= 0xD800 && charCodeHigh <= 0xDBFF && (charCodeLow & 0xFC00) == 0xDC00) {
+                                                if (charCodeHigh >= 0xD800 && charCodeHigh <= 0xDBFF && (charCodeLow & 0xFC00) == 0xDC00) { // low
                                                     var realWord = words2[k2] + words2[k2 + 1];
                                                     codeLen = 2;
                                                     has4BytesUnicode2 = true;
@@ -23872,7 +23877,7 @@ var egret;
                         lineCharNum++;
                         lineElement.hasNextLine = true;
                     }
-                    if (j < textArr.length - 1) {
+                    if (j < textArr.length - 1) { //非最后一个
                         lineElement.width = lineW;
                         lineElement.height = lineH;
                         lineElement.charNum = lineCharNum;
@@ -24078,7 +24083,7 @@ var egret;
      * @platform Web,Native
      * @language zh_CN
      */
-    var TextFieldInputType = (function () {
+    var TextFieldInputType = /** @class */ (function () {
         function TextFieldInputType() {
         }
         /**
@@ -24166,7 +24171,7 @@ var egret;
      * @platform Web,Native
      * @language zh_CN
      */
-    var TextFieldType = (function () {
+    var TextFieldType = /** @class */ (function () {
         function TextFieldType() {
         }
         /**
@@ -24234,7 +24239,7 @@ var egret;
      * @version Egret 2.4
      * @platform Web,Native
      */
-    var TextFieldUtils = (function () {
+    var TextFieldUtils = /** @class */ (function () {
         function TextFieldUtils() {
         }
         /**
@@ -24248,10 +24253,10 @@ var egret;
             var textHeight = TextFieldUtils.$getTextHeight(textfield);
             var startLine = 0;
             var textFieldHeight = values[4 /* textFieldHeight */];
-            if (!isNaN(textFieldHeight)) {
-                if (textHeight < textFieldHeight) {
+            if (!isNaN(textFieldHeight)) { //
+                if (textHeight < textFieldHeight) { //最大高度比需要显示的高度小
                 }
-                else if (textHeight > textFieldHeight) {
+                else if (textHeight > textFieldHeight) { //最大高度比需要显示的高度大
                     startLine = Math.max(values[28 /* scrollV */] - 1, 0);
                     startLine = Math.min(values[29 /* numLines */] - 1, startLine);
                 }
@@ -24310,8 +24315,8 @@ var egret;
             //return 0.5;
             //}
             var textFieldHeight = textfield.$TextField[4 /* textFieldHeight */];
-            if (!isNaN(textFieldHeight)) {
-                if (textHeight < textFieldHeight) {
+            if (!isNaN(textFieldHeight)) { //
+                if (textHeight < textFieldHeight) { //最大高度比需要显示的高度小
                     var valign = 0;
                     if (textfield.$TextField[10 /* verticalAlign */] == egret.VerticalAlign.MIDDLE)
                         valign = 0.5;
@@ -24348,7 +24353,7 @@ var egret;
          */
         TextFieldUtils.$getHit = function (textfield, x, y) {
             var lineArr = textfield.$getLinesArr2();
-            if (textfield.$TextField[3 /* textFieldWidth */] == 0) {
+            if (textfield.$TextField[3 /* textFieldWidth */] == 0) { //文本可点击区域
                 return null;
             }
             var line = 0;
@@ -24507,7 +24512,7 @@ var egret;
      * @platform Web,Native
      * @language zh_CN
      */
-    var VerticalAlign = (function () {
+    var VerticalAlign = /** @class */ (function () {
         function VerticalAlign() {
         }
         /**
@@ -24622,7 +24627,7 @@ var egret;
          * @extends egret.StageText
          * @private
          */
-        var HTML5StageText = (function (_super) {
+        var HTML5StageText = /** @class */ (function (_super) {
             __extends(HTML5StageText, _super);
             /**
              * @private
@@ -24969,7 +24974,7 @@ var egret;
         /**
          * @private
          */
-        var HTMLInput = (function () {
+        var HTMLInput = /** @class */ (function () {
             function HTMLInput() {
                 /**
                  * @private
@@ -25350,7 +25355,7 @@ var egret;
      * @platform Web,Native
      * @includeExample egret/utils/Base64Util.ts
      */
-    var Base64Util = (function () {
+    var Base64Util = /** @class */ (function () {
         function Base64Util() {
         }
         /**
@@ -25480,7 +25485,7 @@ var egret;
      * @platform Web,Native
      * @language zh_CN
      */
-    var Endian = (function () {
+    var Endian = /** @class */ (function () {
         function Endian() {
         }
         /**
@@ -25549,7 +25554,7 @@ var egret;
      * @includeExample egret/utils/ByteArray.ts
      * @language zh_CN
      */
-    var ByteArray = (function () {
+    var ByteArray = /** @class */ (function () {
         /**
          * @version Egret 2.4
          * @platform Web,Native
@@ -25573,7 +25578,7 @@ var egret;
             }
             this.bufferExtSize = bufferExtSize;
             var bytes, wpos = 0;
-            if (buffer) {
+            if (buffer) { //有数据，则可写字节数从字节尾开始
                 var uint8 = void 0;
                 if (buffer instanceof Uint8Array) {
                     uint8 = buffer;
@@ -25883,7 +25888,7 @@ var egret;
         ByteArray.prototype.readBytes = function (bytes, offset, length) {
             if (offset === void 0) { offset = 0; }
             if (length === void 0) { length = 0; }
-            if (!bytes) {
+            if (!bytes) { //由于bytes不返回，所以new新的无意义
                 return;
             }
             var pos = this._position;
@@ -26583,7 +26588,7 @@ var egret;
                 else if (this.inRange(c, 0xDC00, 0xDFFF)) {
                     cps.push(0xFFFD);
                 }
-                else {
+                else { // (inRange(c, 0xD800, 0xDBFF))
                     if (i == n - 1) {
                         cps.push(0xFFFD);
                     }
@@ -26607,6 +26612,639 @@ var egret;
         return ByteArray;
     }());
     egret.ByteArray = ByteArray;
+})(egret || (egret = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-present, Egret Technology.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var egret;
+(function (egret) {
+    /**
+     * Logger is an entrance for the log processing namespace of the engine
+     * @version Egret 2.4
+     * @platform Web,Native
+     * @language en_US
+     */
+    /**
+     * Logger是引擎的日志处理模块入口
+     * @version Egret 2.4
+     * @platform Web,Native
+     * @language zh_CN
+     */
+    var Logger = /** @class */ (function () {
+        function Logger() {
+        }
+        Object.defineProperty(Logger, "logLevel", {
+            /**
+             * Set the current need to open the log level. Grade level are: ALL <DEBUG <INFO <WARN <ERROR <OFF<br/>
+             * This feature is only in DEBUG mode to take effect. <br/>
+             * <Ul>
+             * <Li> Logger.ALL - all levels of log can be printed out. </ li>
+             * <Li> Logger.DEBUG - print debug, info, log, warn, error. </ li>
+             * <Li> Logger.INFO - print info, log, warn, error. </ li>
+             * <Li> Logger.WARN - can print warn, error. </ li>
+             * <Li> Logger.ERROR - You can print error. </ li>
+             * <Li> Logger.OFF - all closed. </ li>
+             * </ Ul>
+             *param LogType from this level to start printing.
+             * @version Egret 2.4
+             * @platform Web,Native
+             * @language en_US
+             */
+            /**
+             * 设置当前需要开启的log级别。级别等级分别为：ALL < DEBUG < INFO < WARN < ERROR < OFF<br/>
+             * 此功能只在 DEBUG 模式下才生效。<br/>
+             * <ul>
+             * <li>Logger.ALL -- 所有等级的log都可以打印出来。</li>
+             * <li>Logger.DEBUG -- 可以打印debug、info、log、warn、error。</li>
+             * <li>Logger.INFO -- 可以打印info、log、warn、error。</li>
+             * <li>Logger.WARN -- 可以打印warn、error。</li>
+             * <li>Logger.ERROR -- 可以打印error。</li>
+             * <li>Logger.OFF -- 全部关闭。</li>
+             * </ul>
+             * @param logType 从这个等级开始打印。
+             * @version Egret 2.4
+             * @platform Web,Native
+             * @language zh_CN
+             */
+            set: function (logType) {
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * open all
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language en_US
+         */
+        /**
+         * 全开
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        Logger.ALL = "all";
+        /**
+         * level: DEBUG
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language en_US
+         */
+        /**
+         * 等级为 DEBUG
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        Logger.DEBUG = "debug";
+        /**
+         * level: INFO
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language en_US
+         */
+        /**
+         * 等级为 INFO
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        Logger.INFO = "info";
+        /**
+         * level: WARN
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language en_US
+         */
+        /**
+         * 等级为 WARN
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        Logger.WARN = "warn";
+        /**
+         * level: ERROR
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language en_US
+         */
+        /**
+         * 等级为 ERROR
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        Logger.ERROR = "error";
+        /**
+         * close all
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language en_US
+         */
+        /**
+         * 全关
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        Logger.OFF = "off";
+        return Logger;
+    }());
+    egret.Logger = Logger;
+})(egret || (egret = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-present, Egret Technology.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var egret;
+(function (egret) {
+    /**
+     * @version Egret 2.4
+     * @platform Web,Native
+     */
+    var NumberUtils = /** @class */ (function () {
+        function NumberUtils() {
+        }
+        /**
+         * Judge whether it is a numerical value
+         * @param value Parameter that needs to be judged
+         * @returns
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language en_US
+         */
+        /**
+         * 判断是否是数值
+         * @param value 需要判断的参数
+         * @returns
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        NumberUtils.isNumber = function (value) {
+            return typeof (value) === "number" && !isNaN(value);
+        };
+        /**
+         * Obtain the approximate sin value of the corresponding angle value
+         * @param value {number} Angle value
+         * @returns {number} sin value
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language en_US
+         */
+        /**
+         * 得到对应角度值的sin近似值
+         * @param value {number} 角度值
+         * @returns {number} sin值
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        NumberUtils.sin = function (value) {
+            var valueFloor = Math.floor(value);
+            var valueCeil = valueFloor + 1;
+            var resultFloor = NumberUtils.sinInt(valueFloor);
+            if (valueFloor == value) {
+                return resultFloor;
+            }
+            var resultCeil = NumberUtils.sinInt(valueCeil);
+            return (value - valueFloor) * resultCeil + (valueCeil - value) * resultFloor;
+        };
+        /**
+         * @private
+         *
+         * @param value
+         * @returns
+         */
+        NumberUtils.sinInt = function (value) {
+            value = value % 360;
+            if (value < 0) {
+                value += 360;
+            }
+            return egret_sin_map[value];
+        };
+        /**
+         * Obtain the approximate cos value of the corresponding angle value
+         * @param value {number} Angle value
+         * @returns {number} cos value
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language en_US
+         */
+        /**
+         * 得到对应角度值的cos近似值
+         * @param value {number} 角度值
+         * @returns {number} cos值
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        NumberUtils.cos = function (value) {
+            var valueFloor = Math.floor(value);
+            var valueCeil = valueFloor + 1;
+            var resultFloor = NumberUtils.cosInt(valueFloor);
+            if (valueFloor == value) {
+                return resultFloor;
+            }
+            var resultCeil = NumberUtils.cosInt(valueCeil);
+            return (value - valueFloor) * resultCeil + (valueCeil - value) * resultFloor;
+        };
+        /**
+         * @private
+         *
+         * @param value
+         * @returns
+         */
+        NumberUtils.cosInt = function (value) {
+            value = value % 360;
+            if (value < 0) {
+                value += 360;
+            }
+            return egret_cos_map[value];
+        };
+        return NumberUtils;
+    }());
+    egret.NumberUtils = NumberUtils;
+})(egret || (egret = {}));
+/**
+ * @private
+ */
+var egret_sin_map = {};
+/**
+ * @private
+ */
+var egret_cos_map = {};
+/**
+ * @private
+ */
+var DEG_TO_RAD = Math.PI / 180;
+for (var NumberUtils_i = 0; NumberUtils_i < 360; NumberUtils_i++) {
+    egret_sin_map[NumberUtils_i] = Math.sin(NumberUtils_i * DEG_TO_RAD);
+    egret_cos_map[NumberUtils_i] = Math.cos(NumberUtils_i * DEG_TO_RAD);
+}
+egret_sin_map[90] = 1;
+egret_cos_map[90] = 0;
+egret_sin_map[180] = 0;
+egret_cos_map[180] = -1;
+egret_sin_map[270] = -1;
+egret_cos_map[270] = 0;
+//对未提供bind的浏览器实现bind机制
+if (!Function.prototype.bind) {
+    Function.prototype.bind = function (oThis) {
+        if (typeof this !== "function") {
+            // closest thing possible to the ECMAScript 5 internal IsCallable function
+            egret.$error(1029);
+        }
+        var aArgs = Array.prototype.slice.call(arguments, 1), fToBind = this, fNOP = function () {
+        }, fBound = function () {
+            return fToBind.apply(this instanceof fNOP && oThis
+                ? this
+                : oThis, aArgs.concat(Array.prototype.slice.call(arguments)));
+        };
+        fNOP.prototype = this.prototype;
+        fBound.prototype = new fNOP();
+        return fBound;
+    };
+}
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-present, Egret Technology.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var egret;
+(function (egret) {
+    /**
+     * The Timer class is the interface to timers, which let you run code on a specified time sequence. Use the start()
+     * method to start a timer. Add an event listener for the timer event to set up code to be run on the timer interval.<br/>
+     * You can create Timer objects to run once or repeat at specified intervals to execute code on a schedule. Depending
+     * on the framerate or the runtime environment (available memory and other factors), the runtime may dispatchEvent events at
+     * slightly offset intervals.
+     * @see egret.TimerEvent
+     * @version Egret 2.4
+     * @platform Web,Native
+     * @includeExample egret/utils/Timer.ts
+     * @language en_US
+     */
+    /**
+     * Timer 类是计时器的接口，它使您能按指定的时间序列运行代码。
+     * 使用 start() 方法来启动计时器。为 timer 事件添加事件侦听器，以便将代码设置为按计时器间隔运行。
+     * 可以创建 Timer 对象以运行一次或按指定间隔重复运行，从而按计划执行代码。
+     * 根据 Egret 的帧速率或运行时环境（可用内存和其他因素），运行时调度事件的间隔可能稍有不同。
+     * @see egret.TimerEvent
+     * @version Egret 2.4
+     * @platform Web,Native
+     * @includeExample egret/utils/Timer.ts
+     * @language zh_CN
+     */
+    var Timer = /** @class */ (function (_super) {
+        __extends(Timer, _super);
+        /**
+         * Constructs a new Timer object with the specified delay and repeatCount states.
+         * @param delay The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.
+         * Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
+         * @param repeatCount Specifies the number of repetitions. If zero, the timer repeats indefinitely.If nonzero,
+         * the timer runs the specified number of times and then stops.
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language en_US
+         */
+        /**
+         * 使用指定的 delay 和 repeatCount 状态构造新的 Timer 对象。
+         * @param delay 计时器事件间的延迟（以毫秒为单位）。建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
+         * @param repeatCount 指定重复次数。如果为零，则计时器将持续不断重复运行。如果不为 0，则将运行计时器，运行次数为指定的次数，然后停止。
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        function Timer(delay, repeatCount) {
+            if (repeatCount === void 0) { repeatCount = 0; }
+            var _this = _super.call(this) || this;
+            /**
+             * @private
+             */
+            _this._delay = 0;
+            /**
+             * @private
+             */
+            _this._currentCount = 0;
+            /**
+             * @private
+             */
+            _this._running = false;
+            /**
+             * @private
+             */
+            _this.updateInterval = 1000;
+            /**
+             * @private
+             */
+            _this.lastCount = 1000;
+            /**
+             * @private
+             */
+            _this.lastTimeStamp = 0;
+            _this.delay = delay;
+            _this.repeatCount = +repeatCount | 0;
+            return _this;
+        }
+        Object.defineProperty(Timer.prototype, "delay", {
+            /**
+             * The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.<br/>
+             * Note: Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
+             * @version Egret 2.4
+             * @platform Web,Native
+             * @language en_US
+             */
+            /**
+             * 计时器事件间的延迟（以毫秒为单位）。如果在计时器正在运行时设置延迟间隔，则计时器将按相同的 repeatCount 迭代重新启动。<br/>
+             * 注意：建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
+             * @version Egret 2.4
+             * @platform Web,Native
+             * @language zh_CN
+             */
+            get: function () {
+                return this._delay;
+            },
+            set: function (value) {
+                if (value < 1) {
+                    value = 1;
+                }
+                if (this._delay == value) {
+                    return;
+                }
+                this._delay = value;
+                this.lastCount = this.updateInterval = Math.round(60 * value);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Timer.prototype, "currentCount", {
+            /**
+             * The total number of times the timer has fired since it started at zero. If the timer has been reset, only the fires since the reset are counted.
+             * @version Egret 2.4
+             * @platform Web,Native
+             * @language en_US
+             */
+            /**
+             * 计时器从 0 开始后触发的总次数。如果已重置了计时器，则只会计入重置后的触发次数。
+             * @version Egret 2.4
+             * @platform Web,Native
+             * @language zh_CN
+             */
+            get: function () {
+                return this._currentCount;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Timer.prototype, "running", {
+            /**
+             * The timer's current state; true if the timer is running, otherwise false.
+             * @version Egret 2.4
+             * @platform Web,Native
+             * @language en_US
+             */
+            /**
+             * 计时器的当前状态；如果计时器正在运行，则为 true，否则为 false。
+             * @version Egret 2.4
+             * @platform Web,Native
+             * @language zh_CN
+             */
+            get: function () {
+                return this._running;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * Stops the timer, if it is running, and sets the currentCount property back to 0, like the reset button of a stopwatch.
+         * Then, when start() is called, the timer instance runs for the specified number of repetitions, as set by the repeatCount value.
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language en_US
+         */
+        /**
+         * 如果计时器正在运行，则停止计时器，并将 currentCount 属性设回为 0，这类似于秒表的重置按钮。然后，在调用 start() 后，将运行计时器实例，运行次数为指定的重复次数（由 repeatCount 值设置）。
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        Timer.prototype.reset = function () {
+            this.stop();
+            this._currentCount = 0;
+        };
+        /**
+         * Starts the timer, if it is not already running.
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language en_US
+         */
+        /**
+         * 如果计时器尚未运行，则启动计时器。
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        Timer.prototype.start = function () {
+            if (this._running)
+                return;
+            this.lastCount = this.updateInterval;
+            this.lastTimeStamp = egret.getTimer();
+            egret.ticker.$startTick(this.$update, this);
+            this._running = true;
+        };
+        /**
+         * Stops the timer. When start() is called after stop(), the timer instance runs for the remaining number of
+         * repetitions, as set by the repeatCount property.
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language en_US
+         */
+        /**
+         * 停止计时器。如果在调用 stop() 后调用 start()，则将继续运行计时器实例，运行次数为剩余的 重复次数（由 repeatCount 属性设置）。
+         * @version Egret 2.4
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        Timer.prototype.stop = function () {
+            if (!this._running)
+                return;
+            egret.stopTick(this.$update, this);
+            this._running = false;
+        };
+        /**
+         * @private
+         * Ticker以60FPS频率刷新此方法
+         */
+        Timer.prototype.$update = function (timeStamp) {
+            var deltaTime = timeStamp - this.lastTimeStamp;
+            if (deltaTime >= this._delay) {
+                this.lastCount = this.updateInterval;
+            }
+            else {
+                this.lastCount -= 1000;
+                if (this.lastCount > 0) {
+                    return false;
+                }
+                this.lastCount += this.updateInterval;
+            }
+            this.lastTimeStamp = timeStamp;
+            this._currentCount++;
+            var complete = (this.repeatCount > 0 && this._currentCount >= this.repeatCount);
+            egret.TimerEvent.dispatchTimerEvent(this, egret.TimerEvent.TIMER);
+            if (complete) {
+                this.stop();
+                egret.TimerEvent.dispatchTimerEvent(this, egret.TimerEvent.TIMER_COMPLETE);
+            }
+            return false;
+        };
+        return Timer;
+    }(egret.EventDispatcher));
+    egret.Timer = Timer;
+})(egret || (egret = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-present, Egret Technology.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var egret;
+(function (egret) {
 })(egret || (egret = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -27325,349 +27963,6 @@ var egret;
 var egret;
 (function (egret) {
     /**
-     * Logger is an entrance for the log processing namespace of the engine
-     * @version Egret 2.4
-     * @platform Web,Native
-     * @language en_US
-     */
-    /**
-     * Logger是引擎的日志处理模块入口
-     * @version Egret 2.4
-     * @platform Web,Native
-     * @language zh_CN
-     */
-    var Logger = (function () {
-        function Logger() {
-        }
-        Object.defineProperty(Logger, "logLevel", {
-            /**
-             * Set the current need to open the log level. Grade level are: ALL <DEBUG <INFO <WARN <ERROR <OFF<br/>
-             * This feature is only in DEBUG mode to take effect. <br/>
-             * <Ul>
-             * <Li> Logger.ALL - all levels of log can be printed out. </ li>
-             * <Li> Logger.DEBUG - print debug, info, log, warn, error. </ li>
-             * <Li> Logger.INFO - print info, log, warn, error. </ li>
-             * <Li> Logger.WARN - can print warn, error. </ li>
-             * <Li> Logger.ERROR - You can print error. </ li>
-             * <Li> Logger.OFF - all closed. </ li>
-             * </ Ul>
-             *param LogType from this level to start printing.
-             * @version Egret 2.4
-             * @platform Web,Native
-             * @language en_US
-             */
-            /**
-             * 设置当前需要开启的log级别。级别等级分别为：ALL < DEBUG < INFO < WARN < ERROR < OFF<br/>
-             * 此功能只在 DEBUG 模式下才生效。<br/>
-             * <ul>
-             * <li>Logger.ALL -- 所有等级的log都可以打印出来。</li>
-             * <li>Logger.DEBUG -- 可以打印debug、info、log、warn、error。</li>
-             * <li>Logger.INFO -- 可以打印info、log、warn、error。</li>
-             * <li>Logger.WARN -- 可以打印warn、error。</li>
-             * <li>Logger.ERROR -- 可以打印error。</li>
-             * <li>Logger.OFF -- 全部关闭。</li>
-             * </ul>
-             * @param logType 从这个等级开始打印。
-             * @version Egret 2.4
-             * @platform Web,Native
-             * @language zh_CN
-             */
-            set: function (logType) {
-            },
-            enumerable: true,
-            configurable: true
-        });
-        /**
-         * open all
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language en_US
-         */
-        /**
-         * 全开
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language zh_CN
-         */
-        Logger.ALL = "all";
-        /**
-         * level: DEBUG
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language en_US
-         */
-        /**
-         * 等级为 DEBUG
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language zh_CN
-         */
-        Logger.DEBUG = "debug";
-        /**
-         * level: INFO
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language en_US
-         */
-        /**
-         * 等级为 INFO
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language zh_CN
-         */
-        Logger.INFO = "info";
-        /**
-         * level: WARN
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language en_US
-         */
-        /**
-         * 等级为 WARN
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language zh_CN
-         */
-        Logger.WARN = "warn";
-        /**
-         * level: ERROR
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language en_US
-         */
-        /**
-         * 等级为 ERROR
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language zh_CN
-         */
-        Logger.ERROR = "error";
-        /**
-         * close all
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language en_US
-         */
-        /**
-         * 全关
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language zh_CN
-         */
-        Logger.OFF = "off";
-        return Logger;
-    }());
-    egret.Logger = Logger;
-})(egret || (egret = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-present, Egret Technology.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var egret;
-(function (egret) {
-    /**
-     * @version Egret 2.4
-     * @platform Web,Native
-     */
-    var NumberUtils = (function () {
-        function NumberUtils() {
-        }
-        /**
-         * Judge whether it is a numerical value
-         * @param value Parameter that needs to be judged
-         * @returns
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language en_US
-         */
-        /**
-         * 判断是否是数值
-         * @param value 需要判断的参数
-         * @returns
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language zh_CN
-         */
-        NumberUtils.isNumber = function (value) {
-            return typeof (value) === "number" && !isNaN(value);
-        };
-        /**
-         * Obtain the approximate sin value of the corresponding angle value
-         * @param value {number} Angle value
-         * @returns {number} sin value
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language en_US
-         */
-        /**
-         * 得到对应角度值的sin近似值
-         * @param value {number} 角度值
-         * @returns {number} sin值
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language zh_CN
-         */
-        NumberUtils.sin = function (value) {
-            var valueFloor = Math.floor(value);
-            var valueCeil = valueFloor + 1;
-            var resultFloor = NumberUtils.sinInt(valueFloor);
-            if (valueFloor == value) {
-                return resultFloor;
-            }
-            var resultCeil = NumberUtils.sinInt(valueCeil);
-            return (value - valueFloor) * resultCeil + (valueCeil - value) * resultFloor;
-        };
-        /**
-         * @private
-         *
-         * @param value
-         * @returns
-         */
-        NumberUtils.sinInt = function (value) {
-            value = value % 360;
-            if (value < 0) {
-                value += 360;
-            }
-            return egret_sin_map[value];
-        };
-        /**
-         * Obtain the approximate cos value of the corresponding angle value
-         * @param value {number} Angle value
-         * @returns {number} cos value
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language en_US
-         */
-        /**
-         * 得到对应角度值的cos近似值
-         * @param value {number} 角度值
-         * @returns {number} cos值
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language zh_CN
-         */
-        NumberUtils.cos = function (value) {
-            var valueFloor = Math.floor(value);
-            var valueCeil = valueFloor + 1;
-            var resultFloor = NumberUtils.cosInt(valueFloor);
-            if (valueFloor == value) {
-                return resultFloor;
-            }
-            var resultCeil = NumberUtils.cosInt(valueCeil);
-            return (value - valueFloor) * resultCeil + (valueCeil - value) * resultFloor;
-        };
-        /**
-         * @private
-         *
-         * @param value
-         * @returns
-         */
-        NumberUtils.cosInt = function (value) {
-            value = value % 360;
-            if (value < 0) {
-                value += 360;
-            }
-            return egret_cos_map[value];
-        };
-        return NumberUtils;
-    }());
-    egret.NumberUtils = NumberUtils;
-})(egret || (egret = {}));
-/**
- * @private
- */
-var egret_sin_map = {};
-/**
- * @private
- */
-var egret_cos_map = {};
-/**
- * @private
- */
-var DEG_TO_RAD = Math.PI / 180;
-for (var NumberUtils_i = 0; NumberUtils_i < 360; NumberUtils_i++) {
-    egret_sin_map[NumberUtils_i] = Math.sin(NumberUtils_i * DEG_TO_RAD);
-    egret_cos_map[NumberUtils_i] = Math.cos(NumberUtils_i * DEG_TO_RAD);
-}
-egret_sin_map[90] = 1;
-egret_cos_map[90] = 0;
-egret_sin_map[180] = 0;
-egret_cos_map[180] = -1;
-egret_sin_map[270] = -1;
-egret_cos_map[270] = 0;
-//对未提供bind的浏览器实现bind机制
-if (!Function.prototype.bind) {
-    Function.prototype.bind = function (oThis) {
-        if (typeof this !== "function") {
-            // closest thing possible to the ECMAScript 5 internal IsCallable function
-            egret.$error(1029);
-        }
-        var aArgs = Array.prototype.slice.call(arguments, 1), fToBind = this, fNOP = function () {
-        }, fBound = function () {
-            return fToBind.apply(this instanceof fNOP && oThis
-                ? this
-                : oThis, aArgs.concat(Array.prototype.slice.call(arguments)));
-        };
-        fNOP.prototype = this.prototype;
-        fBound.prototype = new fNOP();
-        return fBound;
-    };
-}
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-present, Egret Technology.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var egret;
-(function (egret) {
-    /**
      * Register and start a timer,which will notify the callback method at a rate of 60 FPS ,and pass the current time stamp as parameters.<br/>
      * Note: After the registration,it will notify the callback method continuously,you can call the stopTick () method to stop it.
      * @param callBack the call back method. the timeStamp parameter of this method represents the number of milliseconds
@@ -27783,265 +28078,6 @@ var egret;
 var egret;
 (function (egret) {
     /**
-     * The Timer class is the interface to timers, which let you run code on a specified time sequence. Use the start()
-     * method to start a timer. Add an event listener for the timer event to set up code to be run on the timer interval.<br/>
-     * You can create Timer objects to run once or repeat at specified intervals to execute code on a schedule. Depending
-     * on the framerate or the runtime environment (available memory and other factors), the runtime may dispatchEvent events at
-     * slightly offset intervals.
-     * @see egret.TimerEvent
-     * @version Egret 2.4
-     * @platform Web,Native
-     * @includeExample egret/utils/Timer.ts
-     * @language en_US
-     */
-    /**
-     * Timer 类是计时器的接口，它使您能按指定的时间序列运行代码。
-     * 使用 start() 方法来启动计时器。为 timer 事件添加事件侦听器，以便将代码设置为按计时器间隔运行。
-     * 可以创建 Timer 对象以运行一次或按指定间隔重复运行，从而按计划执行代码。
-     * 根据 Egret 的帧速率或运行时环境（可用内存和其他因素），运行时调度事件的间隔可能稍有不同。
-     * @see egret.TimerEvent
-     * @version Egret 2.4
-     * @platform Web,Native
-     * @includeExample egret/utils/Timer.ts
-     * @language zh_CN
-     */
-    var Timer = (function (_super) {
-        __extends(Timer, _super);
-        /**
-         * Constructs a new Timer object with the specified delay and repeatCount states.
-         * @param delay The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.
-         * Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
-         * @param repeatCount Specifies the number of repetitions. If zero, the timer repeats indefinitely.If nonzero,
-         * the timer runs the specified number of times and then stops.
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language en_US
-         */
-        /**
-         * 使用指定的 delay 和 repeatCount 状态构造新的 Timer 对象。
-         * @param delay 计时器事件间的延迟（以毫秒为单位）。建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
-         * @param repeatCount 指定重复次数。如果为零，则计时器将持续不断重复运行。如果不为 0，则将运行计时器，运行次数为指定的次数，然后停止。
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language zh_CN
-         */
-        function Timer(delay, repeatCount) {
-            if (repeatCount === void 0) { repeatCount = 0; }
-            var _this = _super.call(this) || this;
-            /**
-             * @private
-             */
-            _this._delay = 0;
-            /**
-             * @private
-             */
-            _this._currentCount = 0;
-            /**
-             * @private
-             */
-            _this._running = false;
-            /**
-             * @private
-             */
-            _this.updateInterval = 1000;
-            /**
-             * @private
-             */
-            _this.lastCount = 1000;
-            /**
-             * @private
-             */
-            _this.lastTimeStamp = 0;
-            _this.delay = delay;
-            _this.repeatCount = +repeatCount | 0;
-            return _this;
-        }
-        Object.defineProperty(Timer.prototype, "delay", {
-            /**
-             * The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.<br/>
-             * Note: Timer frequency is limited to 60 frames per second, meaning a delay lower than 16.6 milliseconds causes runtime problems.
-             * @version Egret 2.4
-             * @platform Web,Native
-             * @language en_US
-             */
-            /**
-             * 计时器事件间的延迟（以毫秒为单位）。如果在计时器正在运行时设置延迟间隔，则计时器将按相同的 repeatCount 迭代重新启动。<br/>
-             * 注意：建议 delay 不要低于 20 毫秒。计时器频率不得超过 60 帧/秒，这意味着低于 16.6 毫秒的延迟可导致出现运行时问题。
-             * @version Egret 2.4
-             * @platform Web,Native
-             * @language zh_CN
-             */
-            get: function () {
-                return this._delay;
-            },
-            set: function (value) {
-                if (value < 1) {
-                    value = 1;
-                }
-                if (this._delay == value) {
-                    return;
-                }
-                this._delay = value;
-                this.lastCount = this.updateInterval = Math.round(60 * value);
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(Timer.prototype, "currentCount", {
-            /**
-             * The total number of times the timer has fired since it started at zero. If the timer has been reset, only the fires since the reset are counted.
-             * @version Egret 2.4
-             * @platform Web,Native
-             * @language en_US
-             */
-            /**
-             * 计时器从 0 开始后触发的总次数。如果已重置了计时器，则只会计入重置后的触发次数。
-             * @version Egret 2.4
-             * @platform Web,Native
-             * @language zh_CN
-             */
-            get: function () {
-                return this._currentCount;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(Timer.prototype, "running", {
-            /**
-             * The timer's current state; true if the timer is running, otherwise false.
-             * @version Egret 2.4
-             * @platform Web,Native
-             * @language en_US
-             */
-            /**
-             * 计时器的当前状态；如果计时器正在运行，则为 true，否则为 false。
-             * @version Egret 2.4
-             * @platform Web,Native
-             * @language zh_CN
-             */
-            get: function () {
-                return this._running;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        /**
-         * Stops the timer, if it is running, and sets the currentCount property back to 0, like the reset button of a stopwatch.
-         * Then, when start() is called, the timer instance runs for the specified number of repetitions, as set by the repeatCount value.
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language en_US
-         */
-        /**
-         * 如果计时器正在运行，则停止计时器，并将 currentCount 属性设回为 0，这类似于秒表的重置按钮。然后，在调用 start() 后，将运行计时器实例，运行次数为指定的重复次数（由 repeatCount 值设置）。
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language zh_CN
-         */
-        Timer.prototype.reset = function () {
-            this.stop();
-            this._currentCount = 0;
-        };
-        /**
-         * Starts the timer, if it is not already running.
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language en_US
-         */
-        /**
-         * 如果计时器尚未运行，则启动计时器。
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language zh_CN
-         */
-        Timer.prototype.start = function () {
-            if (this._running)
-                return;
-            this.lastCount = this.updateInterval;
-            this.lastTimeStamp = egret.getTimer();
-            egret.ticker.$startTick(this.$update, this);
-            this._running = true;
-        };
-        /**
-         * Stops the timer. When start() is called after stop(), the timer instance runs for the remaining number of
-         * repetitions, as set by the repeatCount property.
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language en_US
-         */
-        /**
-         * 停止计时器。如果在调用 stop() 后调用 start()，则将继续运行计时器实例，运行次数为剩余的 重复次数（由 repeatCount 属性设置）。
-         * @version Egret 2.4
-         * @platform Web,Native
-         * @language zh_CN
-         */
-        Timer.prototype.stop = function () {
-            if (!this._running)
-                return;
-            egret.stopTick(this.$update, this);
-            this._running = false;
-        };
-        /**
-         * @private
-         * Ticker以60FPS频率刷新此方法
-         */
-        Timer.prototype.$update = function (timeStamp) {
-            var deltaTime = timeStamp - this.lastTimeStamp;
-            if (deltaTime >= this._delay) {
-                this.lastCount = this.updateInterval;
-            }
-            else {
-                this.lastCount -= 1000;
-                if (this.lastCount > 0) {
-                    return false;
-                }
-                this.lastCount += this.updateInterval;
-            }
-            this.lastTimeStamp = timeStamp;
-            this._currentCount++;
-            var complete = (this.repeatCount > 0 && this._currentCount >= this.repeatCount);
-            egret.TimerEvent.dispatchTimerEvent(this, egret.TimerEvent.TIMER);
-            if (complete) {
-                this.stop();
-                egret.TimerEvent.dispatchTimerEvent(this, egret.TimerEvent.TIMER_COMPLETE);
-            }
-            return false;
-        };
-        return Timer;
-    }(egret.EventDispatcher));
-    egret.Timer = Timer;
-})(egret || (egret = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-present, Egret Technology.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var egret;
-(function (egret) {
-    /**
      * Transfer number to color character string
      * @param value {number} color value ,such as 0xffffff
      * @returns {string} Color character string, for example, #ffffff.
@@ -28074,37 +28110,6 @@ var egret;
         return "#" + color;
     }
     egret.toColorString = toColorString;
-})(egret || (egret = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-present, Egret Technology.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var egret;
-(function (egret) {
 })(egret || (egret = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -28257,7 +28262,7 @@ var egret;
             if (ua.indexOf("egretnative") >= 0 && ua.indexOf("egretwebview") == -1) {
                 egret.Capabilities["runtimeType" + ""] = egret.RuntimeType.RUNTIME2;
             }
-            if (ua.indexOf("egretnative") >= 0 && egret.nativeRender) {
+            if (ua.indexOf("egretnative") >= 0 && egret.nativeRender) { // Egret Native
                 egret_native.addModuleCallback(function () {
                     web.Html5Capatibility.$init();
                     // WebGL上下文参数自定义
@@ -28460,7 +28465,7 @@ var egret;
         /**
          * @private
          */
-        var AudioType = (function () {
+        var AudioType = /** @class */ (function () {
             function AudioType() {
             }
             /**
@@ -28478,7 +28483,7 @@ var egret;
          * html5兼容性配置
          * @private
          */
-        var Html5Capatibility = (function (_super) {
+        var Html5Capatibility = /** @class */ (function (_super) {
             __extends(Html5Capatibility, _super);
             /**
              * @private
@@ -28514,12 +28519,12 @@ var egret;
                     checkAudioType = true;
                     Html5Capatibility.setAudioType(AudioType.HTML5_AUDIO);
                 }
-                if (ua.indexOf("android") >= 0) {
+                if (ua.indexOf("android") >= 0) { //android
                     if (checkAudioType && canUseWebAudio) {
                         Html5Capatibility.setAudioType(AudioType.WEB_AUDIO);
                     }
                 }
-                else if (ua.indexOf("iphone") >= 0 || ua.indexOf("ipad") >= 0 || ua.indexOf("ipod") >= 0) {
+                else if (ua.indexOf("iphone") >= 0 || ua.indexOf("ipad") >= 0 || ua.indexOf("ipod") >= 0) { //ios
                     if (Html5Capatibility.getIOSVersion() >= 7) {
                         Html5Capatibility._canUseBlob = true;
                         if (checkAudioType && canUseWebAudio) {
@@ -28531,7 +28536,7 @@ var egret;
                 if (!winURL) {
                     Html5Capatibility._canUseBlob = false;
                 }
-                if (ua.indexOf("egretnative") >= 0) {
+                if (ua.indexOf("egretnative") >= 0) { // Egret Native
                     Html5Capatibility.setAudioType(AudioType.HTML5_AUDIO);
                     Html5Capatibility._canUseBlob = true;
                 }
@@ -28652,7 +28657,7 @@ var egret;
         /**
          * @private
          */
-        var WebCapability = (function () {
+        var WebCapability = /** @class */ (function () {
             function WebCapability() {
             }
             /**
@@ -28766,7 +28771,7 @@ var egret;
         /**
          * @private
          */
-        var WebFps = (function () {
+        var WebFps = /** @class */ (function () {
             function WebFps(stage, showFPS, showLog, logFilter, styles) {
                 this.showPanle = true;
                 this.fpsHeight = 0;
@@ -29167,7 +29172,7 @@ var egret;
         /**
          * @private
          */
-        var WebPlayer = (function (_super) {
+        var WebPlayer = /** @class */ (function (_super) {
             __extends(WebPlayer, _super);
             function WebPlayer(container, options) {
                 var _this = _super.call(this) || this;
@@ -29304,7 +29309,7 @@ var egret;
                 }
                 var rotation = 0;
                 if (shouldRotate) {
-                    if (orientation == egret.OrientationMode.LANDSCAPE) {
+                    if (orientation == egret.OrientationMode.LANDSCAPE) { //
                         rotation = 90;
                         canvas.style.top = top + (boundingClientHeight - displayWidth) / 2 + "px";
                         canvas.style.left = (boundingClientWidth + displayHeight) / 2 + "px";
@@ -29557,7 +29562,7 @@ var egret;
         /**
          * @private
          */
-        var WebTouchHandler = (function (_super) {
+        var WebTouchHandler = /** @class */ (function (_super) {
             __extends(WebTouchHandler, _super);
             /**
              * @private
@@ -29572,7 +29577,7 @@ var egret;
                     _this.touch.onTouchBegin(location.x, location.y, event.identifier);
                 };
                 _this.onMouseMove = function (event) {
-                    if (event.buttons == 0) {
+                    if (event.buttons == 0) { //在外面松开按键
                         _this.onTouchEnd(event);
                     }
                     else {
@@ -29775,7 +29780,7 @@ var egret;
          * @private
          * XML节点基类
          */
-        var XMLNode = (function () {
+        var XMLNode = /** @class */ (function () {
             /**
              * @private
              */
@@ -29790,7 +29795,7 @@ var egret;
          * @private
          * XML节点对象
          */
-        var XML = (function (_super) {
+        var XML = /** @class */ (function (_super) {
             __extends(XML, _super);
             /**
              * @private
@@ -29820,7 +29825,7 @@ var egret;
          * @private
          * XML文本节点
          */
-        var XMLText = (function (_super) {
+        var XMLText = /** @class */ (function (_super) {
             __extends(XMLText, _super);
             /**
              * @private
@@ -29968,7 +29973,7 @@ var egret;
          * @private
          * Canvas2D渲染缓冲
          */
-        var CanvasRenderBuffer = (function () {
+        var CanvasRenderBuffer = /** @class */ (function () {
             function CanvasRenderBuffer(width, height, root) {
                 this.surface = createCanvas(width, height);
                 this.context = this.surface.getContext("2d");
@@ -30115,7 +30120,7 @@ var egret;
         /**
          * @private
          */
-        var EgretWebGLAttribute = (function () {
+        var EgretWebGLAttribute = /** @class */ (function () {
             function EgretWebGLAttribute(gl, program, attributeData) {
                 this.gl = gl;
                 this.name = attributeData.name;
@@ -30247,7 +30252,7 @@ var egret;
         /**
          * @private
          */
-        var EgretWebGLProgram = (function () {
+        var EgretWebGLProgram = /** @class */ (function () {
             function EgretWebGLProgram(gl, vertSource, fragSource) {
                 this.vshaderSource = vertSource;
                 this.fshaderSource = fragSource;
@@ -30339,7 +30344,7 @@ var egret;
         /**
          * @private
          */
-        var EgretWebGLUniform = (function () {
+        var EgretWebGLUniform = /** @class */ (function () {
             function EgretWebGLUniform(gl, program, uniformData) {
                 this.gl = gl;
                 this.name = uniformData.name;
@@ -30593,7 +30598,7 @@ var egret;
          * 绘制指令管理器
          * 用来维护drawData数组
          */
-        var WebGLDrawCmdManager = (function () {
+        var WebGLDrawCmdManager = /** @class */ (function () {
             function WebGLDrawCmdManager() {
                 /**
                  * 用于缓存绘制命令的数组
@@ -30849,7 +30854,7 @@ var egret;
          * @private
          * WebGL渲染缓存
          */
-        var WebGLRenderBuffer = (function (_super) {
+        var WebGLRenderBuffer = /** @class */ (function (_super) {
             __extends(WebGLRenderBuffer, _super);
             function WebGLRenderBuffer(width, height, root) {
                 var _this = _super.call(this) || this;
@@ -31255,7 +31260,7 @@ var egret;
          * WebGL上下文对象，提供简单的绘图接口
          * 抽象出此类，以实现共用一个context
          */
-        var WebGLRenderContext = (function () {
+        var WebGLRenderContext = /** @class */ (function () {
             function WebGLRenderContext(width, height) {
                 this.glID = null;
                 this.projectionX = NaN;
@@ -31512,7 +31517,7 @@ var egret;
                     if (bitmapData.format == "image") {
                         bitmapData.webGLTexture = this.createTexture(bitmapData.source);
                     }
-                    else if (bitmapData.format == "pvr") {
+                    else if (bitmapData.format == "pvr") { //todo 需要支持其他格式
                         bitmapData.webGLTexture = this.createTextureFromCompressedData(bitmapData.source.pvrtcData, bitmapData.width, bitmapData.height, bitmapData.source.mipmapsCount, bitmapData.source.format);
                     }
                     if (bitmapData.$deleteSource && bitmapData.webGLTexture) {
@@ -32117,6 +32122,154 @@ var egret;
 (function (egret) {
     var web;
     (function (web) {
+        /**
+         * @private
+         * WebGLRenderTarget类
+         * 一个WebGL渲染目标，拥有一个frame buffer和texture
+         */
+        var WebGLRenderTarget = /** @class */ (function (_super) {
+            __extends(WebGLRenderTarget, _super);
+            function WebGLRenderTarget(gl, width, height) {
+                var _this = _super.call(this) || this;
+                // 清除色
+                _this.clearColor = [0, 0, 0, 0];
+                // 是否启用frame buffer, 默认为true
+                _this.useFrameBuffer = true;
+                _this.gl = gl;
+                // 如果尺寸为 0 chrome会报警
+                _this.width = width || 1;
+                _this.height = height || 1;
+                return _this;
+            }
+            /**
+             * 重置render target的尺寸
+             */
+            WebGLRenderTarget.prototype.resize = function (width, height) {
+                var gl = this.gl;
+                this.width = width;
+                this.height = height;
+                if (this.frameBuffer) {
+                    // 设置texture尺寸
+                    gl.bindTexture(gl.TEXTURE_2D, this.texture);
+                    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+                    // gl.bindTexture(gl.TEXTURE_2D, null);
+                }
+                if (this.stencilBuffer) {
+                    gl.deleteRenderbuffer(this.stencilBuffer);
+                    this.stencilBuffer = null;
+                }
+            };
+            /**
+             * 激活此render target
+             */
+            WebGLRenderTarget.prototype.activate = function () {
+                var gl = this.gl;
+                gl.bindFramebuffer(gl.FRAMEBUFFER, this.getFrameBuffer());
+            };
+            /**
+             * 获取frame buffer
+             */
+            WebGLRenderTarget.prototype.getFrameBuffer = function () {
+                if (!this.useFrameBuffer) {
+                    return null;
+                }
+                return this.frameBuffer;
+            };
+            WebGLRenderTarget.prototype.initFrameBuffer = function () {
+                if (!this.frameBuffer) {
+                    var gl = this.gl;
+                    // 创建材质
+                    this.texture = this.createTexture();
+                    // 创建frame buffer
+                    this.frameBuffer = gl.createFramebuffer();
+                    gl.bindFramebuffer(gl.FRAMEBUFFER, this.frameBuffer);
+                    // 绑定材质
+                    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.texture, 0);
+                }
+            };
+            /**
+             * 创建材质
+             * TODO 创建材质的方法可以合并
+             */
+            WebGLRenderTarget.prototype.createTexture = function () {
+                var gl = this.gl;
+                var texture = gl.createTexture();
+                texture["glContext"] = gl;
+                gl.bindTexture(gl.TEXTURE_2D, texture);
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.width, this.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+                return texture;
+            };
+            /**
+             * 清除render target颜色缓存
+             */
+            WebGLRenderTarget.prototype.clear = function (bind) {
+                var gl = this.gl;
+                if (bind) {
+                    this.activate();
+                }
+                gl.colorMask(true, true, true, true);
+                gl.clearColor(this.clearColor[0], this.clearColor[1], this.clearColor[2], this.clearColor[3]);
+                gl.clear(gl.COLOR_BUFFER_BIT);
+            };
+            WebGLRenderTarget.prototype.enabledStencil = function () {
+                if (!this.frameBuffer || this.stencilBuffer) {
+                    return;
+                }
+                var gl = this.gl;
+                // 设置render buffer的尺寸
+                gl.bindFramebuffer(gl.FRAMEBUFFER, this.frameBuffer); // 是否需要强制绑定？
+                // 绑定stencil buffer
+                this.stencilBuffer = gl.createRenderbuffer();
+                gl.bindRenderbuffer(gl.RENDERBUFFER, this.stencilBuffer);
+                gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_STENCIL, this.width, this.height);
+                gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_STENCIL_ATTACHMENT, gl.RENDERBUFFER, this.stencilBuffer);
+                // 此处不解绑是否会造成bug？
+                // gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+            };
+            WebGLRenderTarget.prototype.dispose = function () {
+                egret.WebGLUtils.deleteWebGLTexture(this.texture);
+            };
+            return WebGLRenderTarget;
+        }(egret.HashObject));
+        web.WebGLRenderTarget = WebGLRenderTarget;
+    })(web = egret.web || (egret.web = {}));
+})(egret || (egret = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-present, Egret Technology.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var egret;
+(function (egret) {
+    var web;
+    (function (web) {
         var blendModes = ["source-over", "lighter", "destination-out"];
         var defaultCompositeOp = "source-over";
         var BLACK_COLOR = "#000000";
@@ -32126,7 +32279,7 @@ var egret;
          * @private
          * WebGL渲染器
          */
-        var WebGLRenderer = (function () {
+        var WebGLRenderer = /** @class */ (function () {
             function WebGLRenderer() {
                 this.nestLevel = 0; //渲染的嵌套层次，0表示在调用堆栈的最外层。
             }
@@ -32545,7 +32698,7 @@ var egret;
                 var m = buffer.globalMatrix;
                 var context = buffer.context;
                 var scissor = false;
-                if (buffer.$hasScissor || m.b != 0 || m.c != 0) {
+                if (buffer.$hasScissor || m.b != 0 || m.c != 0) { // 有旋转的情况下不能使用scissor
                     buffer.context.pushMask(scrollRect.x + offsetX, scrollRect.y + offsetY, scrollRect.width, scrollRect.height);
                 }
                 else {
@@ -33127,158 +33280,10 @@ var egret;
 //////////////////////////////////////////////////////////////////////////////////////
 var egret;
 (function (egret) {
-    var web;
-    (function (web) {
-        /**
-         * @private
-         * WebGLRenderTarget类
-         * 一个WebGL渲染目标，拥有一个frame buffer和texture
-         */
-        var WebGLRenderTarget = (function (_super) {
-            __extends(WebGLRenderTarget, _super);
-            function WebGLRenderTarget(gl, width, height) {
-                var _this = _super.call(this) || this;
-                // 清除色
-                _this.clearColor = [0, 0, 0, 0];
-                // 是否启用frame buffer, 默认为true
-                _this.useFrameBuffer = true;
-                _this.gl = gl;
-                // 如果尺寸为 0 chrome会报警
-                _this.width = width || 1;
-                _this.height = height || 1;
-                return _this;
-            }
-            /**
-             * 重置render target的尺寸
-             */
-            WebGLRenderTarget.prototype.resize = function (width, height) {
-                var gl = this.gl;
-                this.width = width;
-                this.height = height;
-                if (this.frameBuffer) {
-                    // 设置texture尺寸
-                    gl.bindTexture(gl.TEXTURE_2D, this.texture);
-                    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-                    // gl.bindTexture(gl.TEXTURE_2D, null);
-                }
-                if (this.stencilBuffer) {
-                    gl.deleteRenderbuffer(this.stencilBuffer);
-                    this.stencilBuffer = null;
-                }
-            };
-            /**
-             * 激活此render target
-             */
-            WebGLRenderTarget.prototype.activate = function () {
-                var gl = this.gl;
-                gl.bindFramebuffer(gl.FRAMEBUFFER, this.getFrameBuffer());
-            };
-            /**
-             * 获取frame buffer
-             */
-            WebGLRenderTarget.prototype.getFrameBuffer = function () {
-                if (!this.useFrameBuffer) {
-                    return null;
-                }
-                return this.frameBuffer;
-            };
-            WebGLRenderTarget.prototype.initFrameBuffer = function () {
-                if (!this.frameBuffer) {
-                    var gl = this.gl;
-                    // 创建材质
-                    this.texture = this.createTexture();
-                    // 创建frame buffer
-                    this.frameBuffer = gl.createFramebuffer();
-                    gl.bindFramebuffer(gl.FRAMEBUFFER, this.frameBuffer);
-                    // 绑定材质
-                    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.texture, 0);
-                }
-            };
-            /**
-             * 创建材质
-             * TODO 创建材质的方法可以合并
-             */
-            WebGLRenderTarget.prototype.createTexture = function () {
-                var gl = this.gl;
-                var texture = gl.createTexture();
-                texture["glContext"] = gl;
-                gl.bindTexture(gl.TEXTURE_2D, texture);
-                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.width, this.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-                return texture;
-            };
-            /**
-             * 清除render target颜色缓存
-             */
-            WebGLRenderTarget.prototype.clear = function (bind) {
-                var gl = this.gl;
-                if (bind) {
-                    this.activate();
-                }
-                gl.colorMask(true, true, true, true);
-                gl.clearColor(this.clearColor[0], this.clearColor[1], this.clearColor[2], this.clearColor[3]);
-                gl.clear(gl.COLOR_BUFFER_BIT);
-            };
-            WebGLRenderTarget.prototype.enabledStencil = function () {
-                if (!this.frameBuffer || this.stencilBuffer) {
-                    return;
-                }
-                var gl = this.gl;
-                // 设置render buffer的尺寸
-                gl.bindFramebuffer(gl.FRAMEBUFFER, this.frameBuffer); // 是否需要强制绑定？
-                // 绑定stencil buffer
-                this.stencilBuffer = gl.createRenderbuffer();
-                gl.bindRenderbuffer(gl.RENDERBUFFER, this.stencilBuffer);
-                gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_STENCIL, this.width, this.height);
-                gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_STENCIL_ATTACHMENT, gl.RENDERBUFFER, this.stencilBuffer);
-                // 此处不解绑是否会造成bug？
-                // gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-            };
-            WebGLRenderTarget.prototype.dispose = function () {
-                egret.WebGLUtils.deleteWebGLTexture(this.texture);
-            };
-            return WebGLRenderTarget;
-        }(egret.HashObject));
-        web.WebGLRenderTarget = WebGLRenderTarget;
-    })(web = egret.web || (egret.web = {}));
-})(egret || (egret = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-present, Egret Technology.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var egret;
-(function (egret) {
     /**
      * @private
      */
-    var WebGLUtils = (function () {
+    var WebGLUtils = /** @class */ (function () {
         function WebGLUtils() {
         }
         WebGLUtils.compileProgram = function (gl, vertexSrc, fragmentSrc) {
@@ -33371,7 +33376,7 @@ var egret;
          * 顶点数组管理对象
          * 用来维护顶点数组
          */
-        var WebGLVertexArrayObject = (function () {
+        var WebGLVertexArrayObject = /** @class */ (function () {
             function WebGLVertexArrayObject() {
                 this.size = 2000;
                 this.vertexMaxSize = this.size * 4;
@@ -33635,7 +33640,7 @@ var egret;
         /**
          * @private
          */
-        var EgretShaderLib = (function () {
+        var EgretShaderLib = /** @class */ (function () {
             function EgretShaderLib() {
             }
             EgretShaderLib.blur_frag = "precision mediump float;\r\nuniform vec2 blur;\r\nuniform sampler2D uSampler;\r\nvarying vec2 vTextureCoord;\r\nuniform vec2 uTextureSize;\r\nvoid main()\r\n{\r\n    const int sampleRadius = 5;\r\n    const int samples = sampleRadius * 2 + 1;\r\n    vec2 blurUv = blur / uTextureSize;\r\n    vec4 color = vec4(0, 0, 0, 0);\r\n    vec2 uv = vec2(0.0, 0.0);\r\n    blurUv /= float(sampleRadius);\r\n\r\n    for (int i = -sampleRadius; i <= sampleRadius; i++) {\r\n        uv.x = vTextureCoord.x + float(i) * blurUv.x;\r\n        uv.y = vTextureCoord.y + float(i) * blurUv.y;\r\n        color += texture2D(uSampler, uv);\r\n    }\r\n\r\n    color /= float(samples);\r\n    gl_FragColor = color;\r\n}";
@@ -33650,13 +33655,337 @@ var egret;
     })(web = egret.web || (egret.web = {}));
 })(egret || (egret = {}));
 ;
-var Main = (function (_super) {
+var Assets;
+(function (Assets) {
+    Assets.main_rank_png = 'main_rank_png';
+    Assets.main_sign_png = 'main_sign_png';
+    Assets.main_start_png = 'main_start_png';
+})(Assets || (Assets = {}));
+var Groups;
+(function (Groups) {
+    Groups.main = 'main';
+})(Groups || (Groups = {}));
+var CRES;
+(function (CRES) {
+    function loadGroups(groups) {
+        return load({ groups: groups });
+    }
+    CRES.loadGroups = loadGroups;
+    function loadUrls(urls) {
+        return load({ urls: urls });
+    }
+    CRES.loadUrls = loadUrls;
+    function loadKeys(keys) {
+        return load({ keys: keys });
+    }
+    CRES.loadKeys = loadKeys;
+    function load(data) {
+        var groups = data.groups || [], keys = data.keys || [], urls = data.urls || [];
+        return new CRESLoader(groups, keys, urls);
+    }
+    CRES.load = load;
+    // URL资源缓存
+    var URLRESCache = {};
+    function getURLRES(url) {
+        return URLRESCache[url];
+    }
+    CRES.getURLRES = getURLRES;
+    // 配置资源中的重复资源列表
+    var Repeats = [];
+    function init() {
+        RES.setMaxRetryTimes(1);
+        RES.setMaxLoadingThread(20);
+        // 提取重复资源配置数据
+        var config = RES['configInstance'];
+        var parseConfig = config.parseConfig;
+        config.parseConfig = function (data, folder) {
+            Repeats = data.repeats || [];
+            parseConfig.call(this, data, folder);
+        };
+        // 
+        var getRes = RES.getRes;
+        RES.getRes = function (key) {
+            var resItem = config.keyMap[key];
+            if (!resItem) {
+                console.warn("\u8D44\u6E90\u914D\u7F6E\u4E2D\u65E0\u6CD5\u627E\u5230key=" + key + "\u7684\u8D44\u6E90");
+                return null;
+            }
+            else {
+                var theKey = resItem.other || key;
+                return getRes.call(this, theKey);
+            }
+        };
+        // 
+        var getResAsync = RES.getResAsync;
+        RES.getResAsync = function (key, compFunc, thisObject) {
+            var keyMap = config.keyMap;
+            var resItem = keyMap[key];
+            var newCompFunc = function (res, name) {
+                HandleItemRepeats(name);
+                compFunc.call(this, res, name);
+            };
+            if (resItem.other) {
+                getResAsync.call(this, resItem.other, newCompFunc, thisObject);
+            }
+            else {
+                getResAsync.call(this, key, newCompFunc, thisObject);
+            }
+        };
+    }
+    CRES.init = init;
+    /**
+     * 处理资源单项重复
+     */
+    function HandleItemRepeats(key) {
+        var instance = RES['configInstance'];
+        var keyMap = instance.keyMap;
+        var curItem = keyMap[key];
+        if (!curItem.other) {
+            var rps = GetRepeatListByItem(key);
+            rps.forEach(function (name) {
+                var theItem = keyMap[name];
+                // 设置重复资源
+                if (!theItem.other) {
+                    theItem.other = curItem.name;
+                    theItem.loaded = curItem.loaded;
+                    theItem.type = curItem.type;
+                    theItem.url = curItem.url;
+                }
+            });
+        }
+    }
+    /**
+     * 根据重复项获取重复列表
+     */
+    function GetRepeatListByItem(key) {
+        var length = Repeats.length;
+        for (var i = 0; i < length; i++) {
+            var list = Repeats[i];
+            if (list.indexOf(key) != -1) {
+                return list;
+            }
+        }
+        return [];
+    }
+    /**
+     * 资源加载器
+     */
+    var CRESLoader = /** @class */ (function () {
+        // @param groups 所有资源组列表
+        // @param keys 所有Key资源列表
+        // @param urls 所有URL资源列表
+        function CRESLoader(groups, keys, urls) {
+            var _this = this;
+            this.groups = groups;
+            this.keys = keys;
+            this.urls = urls;
+            // 资源组中已经完成加载项个数
+            this.groupDic = {};
+            // 已经完成加载的异步资源个数
+            this.asyncItemsLoaded = 0;
+            this.$doProgressFlag = false;
+            if (groups.length == 0 && keys.length == 0 && urls.length == 0) {
+                console.warn("空资源加载");
+                egret.callLater(function () {
+                    _this.$onResComplete();
+                }, this);
+            }
+            else {
+                this.groupLoading = this.groups.length;
+                this.groupItemsTotal = this.getGroupItemsTotal();
+                this.asyncItemsTotal = this.keys.length + this.urls.length;
+                egret.callLater(function () {
+                    if (_this.groups) {
+                        _this.$initGroupDicAsync();
+                        _this.$initListener();
+                        _this.loadGroupList();
+                    }
+                    _this.loadUrlList();
+                    _this.loadKeyList();
+                }, this);
+            }
+        }
+        CRESLoader.prototype.$initListener = function () {
+            RES.addEventListener(RES.ResourceEvent.GROUP_COMPLETE, this.onGroupComplete, this);
+            RES.addEventListener(RES.ResourceEvent.GROUP_PROGRESS, this.onGroupProgress, this);
+            RES.addEventListener(RES.ResourceEvent.GROUP_LOAD_ERROR, this.onGroupError, this);
+            RES.addEventListener(RES.ResourceEvent.ITEM_LOAD_ERROR, this.onItemError, this);
+        };
+        CRESLoader.prototype.$removeListener = function () {
+            RES.removeEventListener(RES.ResourceEvent.GROUP_COMPLETE, this.onGroupComplete, this);
+            RES.removeEventListener(RES.ResourceEvent.GROUP_PROGRESS, this.onGroupProgress, this);
+            RES.removeEventListener(RES.ResourceEvent.GROUP_LOAD_ERROR, this.onGroupError, this);
+            RES.removeEventListener(RES.ResourceEvent.ITEM_LOAD_ERROR, this.onItemError, this);
+        };
+        // 所有资源组的总资源项个数
+        CRESLoader.prototype.getGroupItemsTotal = function () {
+            var count = 0;
+            var length = this.groups.length;
+            for (var i = 0; i < length; i++) {
+                var groupName = this.groups[i];
+                count += RES.getGroupByName(groupName).length;
+            }
+            return count;
+        };
+        CRESLoader.prototype.$initGroupDicAsync = function () {
+            if (!this.$doProgressFlag)
+                return;
+            for (var i = 0; i < this.groups.length; i++) {
+                var groupName = this.groups[i];
+                this.groupDic[groupName] = 0;
+            }
+        };
+        // 请求加载KEY资源
+        CRESLoader.prototype.loadKeyList = function () {
+            var _this = this;
+            var _loop_1 = function (i) {
+                var key = this_1.keys[i];
+                RES.getResAsync(key, function () {
+                    HandleItemRepeats(key);
+                    _this.onResourceItemComp();
+                }, this_1);
+            };
+            var this_1 = this;
+            for (var i = 0; i < this.keys.length; i++) {
+                _loop_1(i);
+            }
+        };
+        // 请求加载URL资源
+        // 因为egret引擎无法获取已经加载过的URL资源，所以采用URLDICT缓存
+        CRESLoader.prototype.loadUrlList = function () {
+            var _this = this;
+            var _loop_2 = function (i) {
+                var url = this_2.urls[i];
+                RES.getResByUrl(url, function (res) {
+                    URLRESCache[url] = res;
+                    HandleItemRepeats(url);
+                    _this.onResourceItemComp();
+                }, this_2);
+            };
+            var this_2 = this;
+            for (var i = 0; i < this.urls.length; i++) {
+                _loop_2(i);
+            }
+        };
+        CRESLoader.prototype.onResourceItemComp = function () {
+            this.asyncItemsLoaded++;
+            this.doResProgress();
+            this.doResComplete();
+        };
+        // 请求加载资源组
+        CRESLoader.prototype.loadGroupList = function () {
+            for (var i = 0; i < this.groups.length; i++) {
+                var groupName = this.groups[i];
+                RES.loadGroup(groupName);
+            }
+        };
+        CRESLoader.prototype.findGroup = function (groupName) {
+            return this.groups.indexOf(groupName) >= 0;
+        };
+        // 已经加载的资源个数
+        CRESLoader.prototype.getGroupItemsLoaded = function () {
+            if (!this.$doProgressFlag) {
+                console.warn("不需要加载进度时，不该调用此函数");
+                return 0;
+            }
+            var count = 0;
+            for (var groupName in this.groupDic) {
+                count += this.groupDic[groupName];
+            }
+            return count;
+        };
+        CRESLoader.prototype.onGroupComplete = function (event) {
+            if (!this.findGroup(event.groupName))
+                return;
+            this.groupLoading--;
+            if (this.groupLoading <= 0) {
+                this.$removeListener();
+            }
+            this.handleGroupRepeats(event);
+            this.groupDic[event.groupName] = RES.getGroupByName(event.groupName).length;
+            this.doResProgress();
+            this.doResComplete();
+        };
+        CRESLoader.prototype.onGroupProgress = function (event) {
+            if (!this.$doProgressFlag)
+                return;
+            if (!this.findGroup(event.groupName))
+                return;
+            this.groupDic[event.groupName] = event.itemsLoaded;
+            this.doResProgress();
+        };
+        CRESLoader.prototype.onGroupError = function (event) {
+            if (!this.findGroup(event.groupName))
+                return;
+            this.onGroupComplete(event);
+            console.warn("group{" + event.groupName + "} load failure");
+        };
+        CRESLoader.prototype.onItemError = function (event) {
+            if (!this.findGroup(event.groupName))
+                return;
+            var resourceItem = event.resItem;
+            console.warn("item load failure. INFO: group{" + event.groupName + "} + url{" + resourceItem.url + "} + name{" + resourceItem.name + "}");
+        };
+        CRESLoader.prototype.doResComplete = function () {
+            if (this.asyncItemsLoaded === this.asyncItemsTotal && this.groupLoading <= 0) {
+                this.$onResComplete();
+            }
+        };
+        CRESLoader.prototype.doResProgress = function () {
+            if (!this.$doProgressFlag)
+                return;
+            var total = this.asyncItemsTotal + this.groupItemsTotal;
+            var loaded = this.getGroupItemsLoaded() + this.asyncItemsLoaded;
+            this.$onResProgress(loaded, total);
+        };
+        // @implements
+        CRESLoader.prototype.complete = function (c, thisObject) {
+            this.$onResComplete = c.bind(thisObject);
+            return this;
+        };
+        // @implements
+        CRESLoader.prototype.progress = function (c, thisObject) {
+            this.$doProgressFlag = true;
+            this.$onResProgress = c.bind(thisObject);
+            return this;
+        };
+        CRESLoader.prototype.$onResComplete = function () { };
+        CRESLoader.prototype.$onResProgress = function (itemsLoaded, itemsTotal) { };
+        /**
+         * 处理资源组中重复
+         */
+        CRESLoader.prototype.handleGroupRepeats = function (event) {
+            var instance = RES['configInstance'];
+            var keyMap = instance.keyMap;
+            var groupDic = instance.groupDic;
+            var groupName = event.groupName;
+            var groups = groupDic[groupName] || [];
+            groups.forEach(function (groupItem) { return HandleItemRepeats(groupItem.name); });
+        };
+        return CRESLoader;
+    }());
+})(CRES || (CRES = {}));
+var Main = /** @class */ (function (_super) {
     __extends(Main, _super);
     function Main() {
         var _this = _super.call(this) || this;
-        console.log(egret);
+        _this.addEventListener(egret.Event.ADDED_TO_STAGE, _this.onAddToStage, _this);
         return _this;
     }
+    Main.prototype.onAddToStage = function () {
+        RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE, this.onGameStart, this);
+        RES.loadConfig("resource/default.res.json", "resource/");
+    };
+    Main.prototype.onGameStart = function () {
+        var _this = this;
+        CRES.init();
+        CRES.loadGroups([Groups.main]).complete(function () {
+            var bit = new egret.Bitmap();
+            var res = RES.getRes(Assets.main_rank_png);
+            bit.texture = res;
+            _this.addChild(bit);
+        }, this);
+    };
     return Main;
 }(egret.DisplayObjectContainer));
 //# sourceMappingURL=game.js.map

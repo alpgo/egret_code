@@ -12,7 +12,8 @@
     },
     "include": [
         "egret/**/*",
-        "game/**/*"
+        "game/**/*",
+        "libs"
     ],
     "files": [
         "egret/utils/HashObject.ts",
