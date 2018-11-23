@@ -11,6 +11,12 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-present, Egret Technology.
@@ -33965,27 +33971,138 @@ var CRES;
         return CRESLoader;
     }());
 })(CRES || (CRES = {}));
+// 工具函数类
+var test;
+(function (test) {
+    /**
+     * 可追踪调用过程的打印方法
+     */
+    function printMsgLoc(error) {
+        var args = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
+        }
+        // 检测参数
+        if (Object.prototype.toString.call(error) != "[object Error]") {
+            console.warn('the first param not an Error');
+            return;
+        }
+        // 分解多行处理
+        var lines = error.stack.split('\n');
+        // error.message 输出行数，IF "", 全部输出 { +"10" => 10, 这里+号的作用可将字符串转化为Number类型或者NaN}
+        var count = +error.message || lines.length;
+        // 打印的参数信息 {// arguments[1..] 简单的数据输出（数字, 字符串）}
+        var message = [].slice.call(arguments, 1).join(" ");
+        // 更新第一行数据
+        var line0 = lines[0].slice(0, 5) + "\t" + message;
+        // 组合多行内容
+        var result = [line0].concat(lines.slice(1, count + 1)).join("\n");
+        console.log(result);
+        return function () {
+            console.log.apply(null, arguments);
+        };
+    }
+    test.printMsgLoc = printMsgLoc;
+    /**
+     * 页面初始化(调用初始化装饰器函数)
+     */
+    function initView() {
+        var _this = this;
+        var proto = Object.getPrototypeOf(this);
+        var inits = proto[test._init_decorate_] || [];
+        inits.forEach(function (name) {
+            var method = proto[name];
+            method.call(_this);
+        });
+    }
+    test.initView = initView;
+    /**
+     * 页面初始化函数装饰器
+     */
+    test._init_decorate_ = "init-decorate";
+    function init(target, name, desc) {
+        var arr = target[test._init_decorate_] = target[test._init_decorate_] || [];
+        arr.push(name);
+    }
+    test.init = init;
+})(test || (test = {}));
+/// <reference path="Utils.ts"/>
+// 滤镜的测试 
+var test;
+(function (test) {
+    var Filters = /** @class */ (function (_super) {
+        __extends(Filters, _super);
+        function Filters() {
+            var _this = _super.call(this) || this;
+            _this.addEventListener(egret.Event.ADDED_TO_STAGE, function () {
+                test.initView.call(_this);
+            }, _this);
+            return _this;
+        }
+        Filters.prototype.createBg = function () {
+            var bg = new egret.Sprite();
+            bg.graphics.beginFill(0x333, 0.5);
+            bg.graphics.drawRect(0, 0, this.stage.stageWidth, this.stage.stageHeight);
+            bg.graphics.endFill();
+            this.addChild(bg);
+        };
+        Filters.prototype.create = function () {
+            var texture = RES.getRes(Assets.main_rank_png);
+            var bitmap = new egret.Bitmap(texture);
+            this.addChild(bitmap);
+        };
+        __decorate([
+            test.init
+        ], Filters.prototype, "createBg", null);
+        __decorate([
+            test.init
+        ], Filters.prototype, "create", null);
+        return Filters;
+    }(egret.DisplayObjectContainer));
+    test.Filters = Filters;
+})(test || (test = {}));
 var Main = /** @class */ (function (_super) {
     __extends(Main, _super);
     function Main() {
         var _this = _super.call(this) || this;
-        _this.addEventListener(egret.Event.ADDED_TO_STAGE, _this.onAddToStage, _this);
+        RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE, function () {
+            CRES.init();
+            CRES.loadGroups([Groups.main]).complete(_this.onRESLoaded, _this);
+        }, _this);
+        RES.loadConfig("resource/default.res.json", "resource/");
         return _this;
     }
-    Main.prototype.onAddToStage = function () {
-        RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE, this.onGameStart, this);
-        RES.loadConfig("resource/default.res.json", "resource/");
-    };
-    Main.prototype.onGameStart = function () {
-        var _this = this;
-        CRES.init();
-        CRES.loadGroups([Groups.main]).complete(function () {
-            var bit = new egret.Bitmap();
-            var res = RES.getRes(Assets.main_rank_png);
-            bit.texture = res;
-            _this.addChild(bit);
-        }, this);
+    Main.prototype.onRESLoaded = function () {
+        stage = this.stage;
+        var filters = new test.Filters();
+        this.stage.addChild(filters);
+        this.stage.removeChild(this);
     };
     return Main;
 }(egret.DisplayObjectContainer));
+var stage;
+/**
+ * 测试egret$render的一次渲染过程
+ */
+var renderObj = {
+    originRender: null,
+    start: function () {
+        this.originRender = egret.CanvasRenderer.prototype.render;
+        egret.CanvasRenderer.prototype.render = function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            var _a;
+            var result = (_a = renderObj.originRender).call.apply(_a, [this].concat(args));
+            renderObj.stop();
+            return result;
+        };
+    },
+    stop: function () {
+        egret.CanvasRenderer.prototype.render = renderObj.originRender;
+        test.printMsgLoc(new Error(), 'egret render function');
+        debugger;
+    }
+};
 //# sourceMappingURL=game.js.map
