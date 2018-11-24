@@ -1,3 +1,5 @@
+/// <reference path="TestLoc.ts"/>
+
 class Main extends egret.DisplayObjectContainer {
 
     constructor() {
@@ -18,23 +20,3 @@ class Main extends egret.DisplayObjectContainer {
 }
 
 var stage;
-
-/**
- * 测试egret$render的一次渲染过程
- */
-var renderObj = {
-    originRender: null,
-    start: function () {
-        this.originRender = egret.CanvasRenderer.prototype.render;
-        egret.CanvasRenderer.prototype.render = function (...args): any {
-            const result = renderObj.originRender.call(this, ...args);
-            renderObj.stop();
-            return result;
-        };
-    },
-    stop: function () {
-        egret.CanvasRenderer.prototype.render = renderObj.originRender;
-        test.printMsgLoc(new Error(), 'egret render function');
-        debugger;
-    }
-};
