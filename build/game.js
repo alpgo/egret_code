@@ -34046,11 +34046,12 @@ var test;
             bg.graphics.endFill();
             this.addChild(bg);
         };
-        Filters.prototype.create = function () {
+        Filters.prototype.createBitmap = function () {
             var texture = RES.getRes(Assets.main_rank_png);
             var bitmap = new egret.Bitmap(texture);
             bitmap.anchorOffsetX = 48;
             bitmap.anchorOffsetY = 50;
+            bitmap.name = 'rank';
             this.addChild(bitmap);
         };
         __decorate([
@@ -34058,31 +34059,53 @@ var test;
         ], Filters.prototype, "createBg", null);
         __decorate([
             test.init
-        ], Filters.prototype, "create", null);
+        ], Filters.prototype, "createBitmap", null);
         return Filters;
     }(egret.DisplayObjectContainer));
     test.Filters = Filters;
 })(test || (test = {}));
-function testLoc(target, method) {
+/**
+ * 为某个对象的特定方法添加调试定位
+ * @param target 对象
+ * @param method 方法
+ * @param cond 过滤条件
+ */
+function testLoc(target, method, cond) {
     var orginFunc = target[method];
     return function () {
         function newFunc() {
-            test.printMsgLoc(new Error(), "egret: " + method);
-            debugger;
+            var testFlag = false;
+            // 若没有条件过滤 || 条件判断正确, 则添加调试
+            if (!cond || cond.apply(this, arguments)) {
+                testFlag = true;
+                test.printMsgLoc(new Error(), "egret: " + method);
+                debugger;
+            }
             var result = orginFunc.apply(this, arguments);
-            target[method] = orginFunc;
+            testFlag && (target[method] = orginFunc); // 测试完立即恢复原函数，否则该函数每次执行时都是被打上断点。
             return result;
         }
         ;
         target[method] = newFunc;
     };
 }
+/**
+ * 初始化所有的调试信息
+ */
 function iterate(obj) {
     var keys = Object.keys(obj);
     keys.forEach(function (key) {
-        var target = obj[key];
+        var value = obj[key];
         var method = key;
-        var newFunc = testLoc(target, method);
+        if (Object.prototype.toString.call(value) == '[object Array]') {
+            var target = value[0];
+            var cond = value[1];
+            var newFunc = testLoc(target, method, cond);
+        }
+        else {
+            var target = value;
+            var newFunc = testLoc(target, method);
+        }
         Object.defineProperty(obj, key, {
             get: function () {
                 newFunc();
@@ -34100,6 +34123,12 @@ function ticker() {
     };
 }
 ticker();
+// 渲染单个对象时，若name属性匹配时调试定位控制有效 
+function drawDisplayObject(name) {
+    return function (displayObject) {
+        return displayObject.name === name;
+    };
+}
 /**
  * 引擎的所有待测试函数的配置（定位函数 => 断点调试 => 理解原理）
  */
@@ -34111,7 +34140,9 @@ var engine = {
     // 更新舞台尺寸
     updateStageSize: egret.sys.Player.prototype,
     // 主渲染过程
-    render: egret.CanvasRenderer.prototype
+    render: egret.CanvasRenderer.prototype,
+    // 渲染单个对象 （通过为特定的对象添加name属性，可特定调试某个对象的渲染过程）
+    drawDisplayObject: [egret.CanvasRenderer.prototype, drawDisplayObject('rank')]
 };
 iterate(engine);
 // engine.runEgret;

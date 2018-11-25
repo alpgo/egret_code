@@ -20,11 +20,12 @@ module test {
         }
 
         @init
-        public create() {
+        public createBitmap() {
             let texture = RES.getRes(Assets.main_rank_png);
             let bitmap = new egret.Bitmap(texture);
             bitmap.anchorOffsetX = 48;
             bitmap.anchorOffsetY = 50;  
+            bitmap.name = 'rank';
             this.addChild(bitmap);
         }
     }
