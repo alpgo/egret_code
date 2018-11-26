@@ -34034,36 +34034,53 @@ var test;
         __extends(Filters, _super);
         function Filters() {
             var _this = _super.call(this) || this;
+            _this.name = "filters";
             _this.addEventListener(egret.Event.ADDED_TO_STAGE, function () {
                 test.initView.call(_this);
             }, _this);
+            _this.cacheAsBitmap = true;
             return _this;
         }
-        Filters.prototype.createBg = function () {
-            var bg = new egret.Sprite();
-            bg.graphics.beginFill(0x333, 0.5);
-            bg.graphics.drawRect(0, 0, this.stage.stageWidth, this.stage.stageHeight);
-            bg.graphics.endFill();
-            this.addChild(bg);
-        };
-        Filters.prototype.createBitmap = function () {
+        Filters.prototype.createRankButt = function () {
             var texture = RES.getRes(Assets.main_rank_png);
             var bitmap = new egret.Bitmap(texture);
+            bitmap.x = this.stage.stageWidth / 2;
+            bitmap.y = this.stage.stageHeight / 2;
+            bitmap.scaleX = 2;
+            bitmap.scaleY = 2;
             bitmap.anchorOffsetX = 48;
             bitmap.anchorOffsetY = 50;
             bitmap.name = 'rank';
             this.addChild(bitmap);
+            this.bitmap = bitmap;
+        };
+        Filters.prototype.useColorFilter = function () {
+            var matrix = [
+                2, 0, 0, 0, 0,
+                0, 1, 0, 0, 0,
+                0, 0, 1, 0, 0,
+                0, 0, 0, 1, 0
+            ];
+            var colorFilter = new egret.ColorMatrixFilter(matrix);
+            this.bitmap.filters = [colorFilter];
         };
         __decorate([
             test.init
-        ], Filters.prototype, "createBg", null);
+        ], Filters.prototype, "createRankButt", null);
         __decorate([
             test.init
-        ], Filters.prototype, "createBitmap", null);
+        ], Filters.prototype, "useColorFilter", null);
         return Filters;
     }(egret.DisplayObjectContainer));
     test.Filters = Filters;
 })(test || (test = {}));
+/**
+ * 误区：
+ *     * 颜色滤镜的使用，有着CanvasRender.ts/colorFilter()的密集运算，为了提高性能，需要使用 cacheAsBitmap 提高性能， 但是这里有个误区：
+ *      1. 虽然 this.bitmap.cacheAsBitmap = true, 但是每一帧都会运行colorFilter()，看起来 cacheAsBitmap 没有起着作用。正确的办法如下 >
+ *      2. 将 this.bitmap.parent.cacheAsBitmap = true，此时 colorFilter() 就不会一直运行了。
+ *     （正确方法）当子元素设置filters时，应该将该父元素设置为cacheAsBitmap.
+ */ 
 /**
  * 为某个对象的特定方法添加调试定位
  * @param target 对象
@@ -34139,31 +34156,43 @@ var engine = {
     updateScreenSize: egret.web.WebPlayer.prototype,
     // 更新舞台尺寸
     updateStageSize: egret.sys.Player.prototype,
+    // 舞台Stage的displayList初始化
+    createDisplayList: egret.sys.Player.prototype,
     // 主渲染过程
     render: egret.CanvasRenderer.prototype,
     // 渲染单个对象 （通过为特定的对象添加name属性，可特定调试某个对象的渲染过程）
-    drawDisplayObject: [egret.CanvasRenderer.prototype, drawDisplayObject('rank')]
+    drawDisplayObject: [egret.CanvasRenderer.prototype, drawDisplayObject('filters')]
 };
 iterate(engine);
-// engine.runEgret;
+// engine.drawDisplayObject;
 /// <reference path="TestLoc.ts"/>
 var Main = /** @class */ (function (_super) {
     __extends(Main, _super);
     function Main() {
         var _this = _super.call(this) || this;
-        RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE, function () {
-            CRES.init();
-            CRES.loadGroups([Groups.main]).complete(_this.onRESLoaded, _this);
+        _this.addEventListener(egret.Event.ADDED_TO_STAGE, function () {
+            test.initView.call(_this);
+            RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE, function () {
+                CRES.init();
+                CRES.loadGroups([Groups.main]).complete(_this.onRESLoaded, _this);
+            }, _this);
+            RES.loadConfig("resource/default.res.json", "resource/");
         }, _this);
-        RES.loadConfig("resource/default.res.json", "resource/");
         return _this;
     }
     Main.prototype.onRESLoaded = function () {
-        stage = this.stage;
         var filters = new test.Filters();
         this.stage.addChild(filters);
         this.stage.removeChild(this);
     };
+    Main.prototype.setStageBgColor = function () {
+        stage = this.stage;
+        var canvas = document.getElementsByTagName('canvas')[0];
+        canvas.style.backgroundColor = 'rgba(185,211,238,0.5)';
+    };
+    __decorate([
+        test.init
+    ], Main.prototype, "setStageBgColor", null);
     return Main;
 }(egret.DisplayObjectContainer));
 var stage;

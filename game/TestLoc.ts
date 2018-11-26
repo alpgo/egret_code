@@ -77,12 +77,14 @@ const engine = {
     updateScreenSize: egret.web.WebPlayer.prototype,
     // 更新舞台尺寸
     updateStageSize: egret.sys.Player.prototype,
+    // 舞台Stage的displayList初始化
+    createDisplayList: egret.sys.Player.prototype,
     // 主渲染过程
     render: egret.CanvasRenderer.prototype,
     // 渲染单个对象 （通过为特定的对象添加name属性，可特定调试某个对象的渲染过程）
-    drawDisplayObject: [egret.CanvasRenderer.prototype, drawDisplayObject('rank')]
+    drawDisplayObject: [egret.CanvasRenderer.prototype, drawDisplayObject('filters')]
 };
 
 iterate(engine);
 
-// engine.runEgret;
+// engine.drawDisplayObject;
