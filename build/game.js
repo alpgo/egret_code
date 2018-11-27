@@ -14674,7 +14674,7 @@ var egret;
                 _this.userPlay = false;
                 _this.isPlayed = false;
                 _this.screenChanged = function (e) {
-                    var isfullscreen = document.fullscreenEnabled || document.webkitIsFullScreen;
+                    var isfullscreen = document.fullscreenEnabled || document["webkitIsFullScreen"];
                     if (!isfullscreen) {
                         _this.checkFullScreen(false);
                         if (!egret.Capabilities.isMobile) {
@@ -34161,7 +34161,7 @@ var engine = {
     // 主渲染过程
     render: egret.CanvasRenderer.prototype,
     // 渲染单个对象 （通过为特定的对象添加name属性，可特定调试某个对象的渲染过程）
-    drawDisplayObject: [egret.CanvasRenderer.prototype, drawDisplayObject('filters')]
+    drawDisplayObject: [egret.CanvasRenderer.prototype, drawDisplayObject('mask')]
 };
 iterate(engine);
 // engine.drawDisplayObject;
@@ -34180,15 +34180,16 @@ var Main = /** @class */ (function (_super) {
         }, _this);
         return _this;
     }
-    Main.prototype.onRESLoaded = function () {
-        var filters = new test.Filters();
-        this.stage.addChild(filters);
-        this.stage.removeChild(this);
-    };
     Main.prototype.setStageBgColor = function () {
         stage = this.stage;
         var canvas = document.getElementsByTagName('canvas')[0];
         canvas.style.backgroundColor = 'rgba(185,211,238,0.5)';
+    };
+    Main.prototype.onRESLoaded = function () {
+        // let filters = new test.Filters();
+        var mask = new test.Mask();
+        this.stage.addChild(mask);
+        this.stage.removeChild(this);
     };
     __decorate([
         test.init
@@ -34196,4 +34197,56 @@ var Main = /** @class */ (function (_super) {
     return Main;
 }(egret.DisplayObjectContainer));
 var stage;
+/// <reference path="Utils.ts"/>
+// 遮罩的测试
+var test;
+(function (test) {
+    var Mask = /** @class */ (function (_super) {
+        __extends(Mask, _super);
+        function Mask() {
+            var _this = _super.call(this) || this;
+            _this.name = 'mask';
+            _this.addEventListener(egret.Event.ADDED_TO_STAGE, function () {
+                test.initView.call(_this);
+            }, _this);
+            return _this;
+        }
+        Mask.prototype.createRankButt = function () {
+            var texture = RES.getRes(Assets.main_rank_png);
+            var bitmap = new egret.Bitmap(texture);
+            bitmap.x = this.stage.stageWidth / 2;
+            bitmap.y = this.stage.stageHeight / 2;
+            // bitmap.scaleX = 2;
+            // bitmap.scaleY = 2;
+            // bitmap.anchorOffsetX = 48;
+            // bitmap.anchorOffsetY = 50;
+            bitmap.name = 'mask-rank';
+            this.addChild(bitmap);
+            this.bitmap = bitmap;
+        };
+        // @init
+        Mask.prototype.useMaskByRect = function () {
+            var rect = new egret.Rectangle(0, 0, 96, 50);
+            this.bitmap.mask = rect;
+        };
+        Mask.prototype.userMaskByObj = function () {
+            var circle = new egret.Shape();
+            circle.graphics.beginFill(0x0000ff);
+            circle.graphics.drawCircle(48, 50, 30);
+            circle.graphics.endFill();
+            circle.x = this.stage.stageWidth / 2;
+            circle.y = this.stage.stageHeight / 2;
+            this.addChild(circle);
+            this.bitmap.mask = circle;
+        };
+        __decorate([
+            test.init
+        ], Mask.prototype, "createRankButt", null);
+        __decorate([
+            test.init
+        ], Mask.prototype, "userMaskByObj", null);
+        return Mask;
+    }(egret.DisplayObjectContainer));
+    test.Mask = Mask;
+})(test || (test = {}));
 //# sourceMappingURL=game.js.map

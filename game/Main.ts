@@ -14,18 +14,21 @@ class Main extends egret.DisplayObjectContainer {
         }, this);
     }
 
-    onRESLoaded() {
-        let filters = new test.Filters();
-        this.stage.addChild(filters);
-        this.stage.removeChild(this);
-    }
-
     @test.init
     setStageBgColor() {
         stage = this.stage;
         var canvas = document.getElementsByTagName('canvas')[0];
         canvas.style.backgroundColor = 'rgba(185,211,238,0.5)';
     }
+
+    onRESLoaded() {
+        // let filters = new test.Filters();
+        let mask = new test.Mask();
+        this.stage.addChild(mask);
+        this.stage.removeChild(this);
+    }
+
+
 }
 
 var stage;

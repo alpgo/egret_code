@@ -742,7 +742,7 @@ namespace egret {
                         context.lineWidth = lineWidth;
                         context.strokeStyle = forHitTest ? BLACK_COLOR : getRGBAString(strokeFill.lineColor, strokeFill.lineAlpha);
                         context.lineCap = CAPS_STYLES[strokeFill.caps];
-                        context.lineJoin = strokeFill.joints;
+                        context.lineJoin = strokeFill.joints as any;
                         context.miterLimit = strokeFill.miterLimit;
                         if (context.setLineDash) {
                             context.setLineDash(strokeFill.lineDash);
