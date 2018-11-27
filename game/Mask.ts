@@ -34,8 +34,8 @@ module test {
             this.bitmap.mask = rect;
         }
 
-        @init
-        public userMaskByObj() {
+        // @init
+        public useMaskByShapeObj() {
             var circle: egret.Shape = new egret.Shape();
             circle.graphics.beginFill(0x0000ff);
             circle.graphics.drawCircle(48, 50, 30);
@@ -44,6 +44,16 @@ module test {
             circle.y = this.stage.stageHeight / 2;
             this.addChild(circle);
             this.bitmap.mask = circle;
+        }
+
+        // @init
+        public useMaskByBitmap() {
+            var maskObj = new egret.Bitmap();
+            maskObj.x = this.stage.stageWidth / 2;
+            maskObj.y = this.stage.stageHeight / 2;
+            maskObj.texture = RES.getRes(Assets.main_coin_png);
+            this.addChild(maskObj);
+            this.bitmap.mask = maskObj;
         }
     }
 }

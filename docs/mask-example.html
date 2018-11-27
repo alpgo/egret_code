@@ -1,0 +1,41 @@
+<!-- 模拟遮罩的设计原理： canvas图片合成 -->
+<html>
+<style>
+    #canvas {
+        border: thin inset #aaaaaa;
+    }
+</style>
+
+<body>
+    <canvas id='canvas' width="600" height="400"></canvas>
+</body>
+<script>
+    var offCanvas = document.createElement('canvas');
+    offCanvas.width = 600;
+    offCanvas.height = 400;
+    var offCtx = offCanvas.getContext('2d');
+    // 观察(1,1)像素在合成前后的变化
+    // 矩形 （显示对象）
+    offCtx.fillStyle = "#ff0000";
+    offCtx.fillRect(0, 0, 200, 200);
+    var pxds0 = offCtx.getImageData(1, 1, 1, 1);
+    console.log(pxds0);
+    // 圆形 （显示对象的遮罩）
+    // offCtx.globalCompositeOperation = "destination-in"; // 可注释或非注释，观察变化
+    offCtx.fillStyle = "#0000ff";
+    offCtx.beginPath();
+    offCtx.arc(100, 100, 100, 0, Math.PI * 2, false);
+    offCtx.fill();
+    // 该像素被擦除了
+    var pxds1 = offCtx.getImageData(1, 1, 1, 1);
+    console.log(pxds1); // 遮罩外的区域像素值为[0, 0, 0, 0], 可见遮罩外的像素被擦除了，从而完成了遮罩的功能
+    // 绘制离屏canvas
+    var canvas = document.getElementById('canvas')
+    var context = canvas.getContext('2d');
+    // 绘制与遮罩无关的其他对象（不受遮罩的影响）
+    context.fillStyle = '#00ff00';
+    context.fillRect(0, 0, 600, 400);
+    context.drawImage(offCanvas, 0, 0);
+</script>
+
+</html>

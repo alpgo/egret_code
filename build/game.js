@@ -33663,9 +33663,8 @@ var egret;
 ;
 var Assets;
 (function (Assets) {
+    Assets.main_coin_png = 'main_coin_png';
     Assets.main_rank_png = 'main_rank_png';
-    Assets.main_sign_png = 'main_sign_png';
-    Assets.main_start_png = 'main_start_png';
 })(Assets || (Assets = {}));
 var Groups;
 (function (Groups) {
@@ -34229,7 +34228,8 @@ var test;
             var rect = new egret.Rectangle(0, 0, 96, 50);
             this.bitmap.mask = rect;
         };
-        Mask.prototype.userMaskByObj = function () {
+        // @init
+        Mask.prototype.useMaskByShapeObj = function () {
             var circle = new egret.Shape();
             circle.graphics.beginFill(0x0000ff);
             circle.graphics.drawCircle(48, 50, 30);
@@ -34239,12 +34239,18 @@ var test;
             this.addChild(circle);
             this.bitmap.mask = circle;
         };
+        // @init
+        Mask.prototype.useMaskByBitmap = function () {
+            var maskObj = new egret.Bitmap();
+            maskObj.x = this.stage.stageWidth / 2;
+            maskObj.y = this.stage.stageHeight / 2;
+            maskObj.texture = RES.getRes(Assets.main_coin_png);
+            this.addChild(maskObj);
+            this.bitmap.mask = maskObj;
+        };
         __decorate([
             test.init
         ], Mask.prototype, "createRankButt", null);
-        __decorate([
-            test.init
-        ], Mask.prototype, "userMaskByObj", null);
         return Mask;
     }(egret.DisplayObjectContainer));
     test.Mask = Mask;
