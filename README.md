@@ -29,4 +29,6 @@
 
 * 补充： 为了更加精确的调试对象，配置文件中可添加允许方法待调试的过滤条件, 自然代码复杂化了。比如：控制台中输入`engine.drawDisplayObject`, 则可以查看某个特定[bitmap.name = 'rank'](game/Filters.ts)`位图对象`的具体渲染过程。
 
+* 加强[Utils.ts文件](game/Utils.ts)中添加了getBindData()方法,结合bindData()实现了视图与数据的绑定过程[示例](game/CEUI.ts),将用数据改变图片的具体属性,从而触发EUI的布局和属性验证机制等方法, 结合[TestLoc.ts文件](game/TestLoc.ts)中的调试工具, 进一步简化了调试.因为直接更新视图对象的属性,需要保存这个视图对象的全局引用不太方便,采用数据引用更加方便, 而且可以同时引用过个视图对象等.
+
 ###

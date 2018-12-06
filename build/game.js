@@ -59532,17 +59532,85 @@ var test;
             var method = proto[name];
             method.call(_this);
         });
+        // bind data models
+        var updates = [];
+        var binds = proto[test._models_decorate_] || [];
+        binds.forEach(function (item) {
+            var data = item.model;
+            if (data && data.updates) {
+                var method = proto[item.view];
+                var fn = method.bind(_this);
+                data.updates.push(fn);
+                updates.push([data, fn]);
+            }
+            else {
+                console.warn(data + "\u5E94\u8BE5\u4ECEgetBindData()\u8FD4\u56DE?");
+            }
+        });
+        // remove updates 
+        this.addEventListener(egret.Event.REMOVED_FROM_STAGE, function () {
+            updates.forEach(function (data, fn) {
+                var index = data.updates.indexOf(fn);
+                index >= 0 && data.updates.splice(index, 1);
+            });
+            // 闭包中释放引用的 data && fn
+            updates = [];
+        }, this);
     }
     test.initView = initView;
     /**
-     * 页面初始化函数装饰器
-     */
+      * 页面初始化函数装饰器
+      */
     test._init_decorate_ = "init-decorate";
     function init(target, name, desc) {
         var arr = target[test._init_decorate_] = target[test._init_decorate_] || [];
         arr.push(name);
     }
     test.init = init;
+    /**
+     * 数据与视图绑定
+     */
+    test._models_decorate_ = "binddata-decorate";
+    function bindData(data) {
+        return function (target, property, descriptor) {
+            var arr = target[test._models_decorate_] = target[test._models_decorate_] || [];
+            arr.push({
+                model: data,
+                view: property
+            });
+        };
+    }
+    test.bindData = bindData;
+    /**
+     * 基础测试数据(除了数组的元素变化,其他数据具有数据更新通知能力)
+     */
+    function getBindData(orginData) {
+        var currentData = { updates: [] };
+        bind(orginData, currentData, "");
+        return currentData;
+        function bind(orgin, current, keyChain) {
+            var keys = Object.keys(orgin);
+            keys.forEach(function (key) {
+                var currentValue = orgin[key];
+                if (Object.prototype.toString.call(currentValue) === "[object Object]") {
+                    current[key] = {};
+                    bind(orgin[key], current[key], keyChain + "." + key);
+                    return;
+                }
+                Object.defineProperty(current, key, {
+                    get: function () { return currentValue; },
+                    set: function (value) {
+                        if (value != currentValue) {
+                            var oldValue_1 = currentValue;
+                            currentValue = value;
+                            currentData.updates.forEach(function (fn) { return fn(oldValue_1, currentValue, keyChain + "." + key, currentData); });
+                        }
+                    }
+                });
+            });
+        }
+    }
+    test.getBindData = getBindData;
 })(test || (test = {}));
 /// <reference path="Utils.ts"/>
 /**
@@ -59550,6 +59618,12 @@ var test;
  */
 var test;
 (function (test) {
+    test.edata = test.getBindData({
+        name: '通过数据控制image的图片属性',
+        offset: {
+            tx: 0
+        }
+    });
     var CEUI = /** @class */ (function (_super) {
         __extends(CEUI, _super);
         function CEUI() {
@@ -59565,8 +59639,14 @@ var test;
         };
         CEUI.prototype.createImage = function () {
             this.image = new eui.Image();
+            this.image.name = 'image';
             this.image.source = RES.getRes(Assets.main_coin_png);
             this.group.addChild(this.image);
+        };
+        CEUI.prototype.updateData = function (oldValue, newValue, keyName, obj) {
+            engine.drawDisplayObject;
+            this.image.x = test.edata.offset.tx;
+            console.log("edata" + keyName + "\u66F4\u65B0\u524D" + oldValue + "\u66F4\u65B0\u540E" + newValue);
         };
         __decorate([
             test.init
@@ -59574,6 +59654,9 @@ var test;
         __decorate([
             test.init
         ], CEUI.prototype, "createImage", null);
+        __decorate([
+            test.bindData(test.edata)
+        ], CEUI.prototype, "updateData", null);
         return CEUI;
     }(egret.DisplayObjectContainer));
     test.CEUI = CEUI;
@@ -60013,7 +60096,7 @@ var engine = {
     // 主渲染过程
     render: egret.CanvasRenderer.prototype,
     // 渲染单个对象 （通过为特定的对象添加name属性，可特定调试某个对象的渲染过程）
-    drawDisplayObject: [egret.CanvasRenderer.prototype, drawDisplayObject('mask')]
+    drawDisplayObject: [egret.CanvasRenderer.prototype, drawDisplayObject('image')]
 };
 iterate(engine);
 // engine.drawDisplayObject;
