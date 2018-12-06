@@ -1,7 +1,7 @@
 /// <reference path="Utils.ts"/>
 
 // 遮罩的测试
-module test {
+module test {   
     export class Mask extends egret.DisplayObjectContainer {
 
         constructor() {

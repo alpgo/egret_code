@@ -23,8 +23,9 @@ class Main extends egret.DisplayObjectContainer {
 
     onRESLoaded() {
         // let filters = new test.Filters();
-        let mask = new test.Mask();
-        this.stage.addChild(mask);
+        // let mask = new test.Mask();
+        let ceui = new test.CEUI();
+        this.stage.addChild(ceui);
         this.stage.removeChild(this);
     }
 

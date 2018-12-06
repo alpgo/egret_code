@@ -12,6 +12,7 @@
     },
     "include": [
         "egret/**/*",
+        "eui/**/*",
         "game/**/*",
         "libs"
     ],
@@ -19,13 +20,32 @@
         "egret/utils/HashObject.ts",
         "egret/utils/DataStructure.ts",
         "egret/events/EventDispatcher.ts",
+        "egret/geom/Matrix.ts",
         "egret/display/DisplayObject.ts",
+        "egret/display/DisplayObjectContainer.ts",
         "egret/filters/Filter.ts",
         "egret/filters/GlowFilter.ts",
         "egret/display/Texture.ts",
         "egret/i18n/tr.ts",
         "egret/player/nodes/RenderNode.ts",
-        "egret/player/paths/Path2D.ts"
+        "egret/player/paths/Path2D.ts",
+        "egret/display/Bitmap.ts",
+        "egret/player/nodes/RenderNode.ts",
+        "egret/player/nodes/NormalBitmapNode.ts",
+
+        "eui/components/Component.ts",
+        "eui/components/Group.ts",
+        "eui/components/DataGroup.ts",
+        "eui/components/Button.ts",
+        "eui/utils/registerBindable.ts",
+        "eui/components/ToggleButton.ts",
+        "eui/components/supportClasses/ScrollBarBase.ts",
+        "eui/components/supportClasses/Range.ts",
+        "eui/components/supportClasses/SliderBase.ts",
+        "eui/components/supportClasses/ListBase.ts",
+        "eui/layouts/supportClasses/LayoutBase.ts",
+        "eui/layouts/supportClasses/LinearLayoutBase.ts"
+        
     ],
     "exclude": [
         "node_modules",
