@@ -20,6 +20,12 @@ module test {
             }, this);
         }
 
+        set show(value) {
+            if (value > 10) {
+                console.log(10);
+            }
+        }
+
         private group: eui.Group;
         @init
         public createGroup() {
@@ -36,10 +42,17 @@ module test {
             this.group.addChild(this.image);
         }
 
+        // @init
+        public init0() {
+            // 测试set方法
+            setDebugMethod("show", Object.getPrototypeOf(this))();
+            this.show = 100;
+        }
+
         @bindData(edata)
         public updateData(oldValue, newValue, keyName, obj) {
-            engine.drawDisplayObject;
             this.image.x = edata.offset.tx;
+            testMethod("drawDisplayObject", drawDisplayObject('image')); // 标记待测试方法
             console.log(`edata${keyName}更新前${oldValue}更新后${newValue}`);
         }
     }
