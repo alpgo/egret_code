@@ -45,14 +45,14 @@ module test {
         // @init
         public init0() {
             // 测试set方法
-            setDebugMethod("show", Object.getPrototypeOf(this))();
+            UTEST.setDebugMethod("show", Object.getPrototypeOf(this))();
             this.show = 100;
         }
 
         @bindData(edata)
         public updateData(oldValue, newValue, keyName, obj) {
             this.image.x = edata.offset.tx;
-            testMethod("drawDisplayObject", drawDisplayObject('image')); // 标记待测试方法
+            UTEST.runDebugMethod("drawDisplayObject", drawDisplayObject('image')); // 标记待测试方法
             console.log(`edata${keyName}更新前${oldValue}更新后${newValue}`);
         }
     }

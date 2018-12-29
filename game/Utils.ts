@@ -89,4 +89,10 @@ module test {
         }
     }
 
+    // 条件函数: 当渲染对象的name属性匹配时, 条件成立
+    export function drawDisplayObject(name: string) {
+        return function (displayObject: egret.DisplayObject) {
+            return displayObject.name === name;
+        };
+    }
 }

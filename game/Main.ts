@@ -1,4 +1,4 @@
-/// <reference path="TestLoc.ts"/>
+var stage;
 
 class Main extends egret.DisplayObjectContainer {
 
@@ -30,6 +30,23 @@ class Main extends egret.DisplayObjectContainer {
     }
 
 
+    @test.init
+    addEgretEngineDebug() {
+        // 配置数据: 待标记原始方法为可调试方法
+        UTEST.parseConfig({
+            // 白鹭初始化
+            runEgret: egret,
+            // 屏幕尺寸计算
+            updateScreenSize: egret.web.WebPlayer.prototype,
+            // 更新舞台尺寸
+            updateStageSize: egret.sys.Player.prototype,
+            // 舞台Stage的displayList初始化
+            createDisplayList: egret.sys.Player.prototype,
+            // 主渲染过程
+            render: egret.CanvasRenderer.prototype,
+            // 渲染单个对象 （通过为特定的对象添加name属性，可特定调试某个对象的渲染过程）
+            drawDisplayObject: egret.CanvasRenderer.prototype
+        });
+    }
 }
 
-var stage;
