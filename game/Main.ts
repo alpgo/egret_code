@@ -32,6 +32,7 @@ class Main extends egret.DisplayObjectContainer {
 
     @test.init
     addEgretEngineDebug() {
+        UTEST.setON();
         // 配置数据: 待标记原始方法为可调试方法
         UTEST.parseConfig({
             // 白鹭初始化

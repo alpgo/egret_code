@@ -6,7 +6,7 @@
 module test {
 
     export let edata = getBindData({
-        name: '通过数据控制image的图片属性',
+        name: '在控制台中通过数据可以更好的控制image的图片属性或者触发调试工具等',
         offset: {
             tx: 0
         }
@@ -20,10 +20,11 @@ module test {
             }, this);
         }
 
-        set show(value) {
-            if (value > 10) {
-                console.log(10);
-            }
+        @init
+        public addEgretEuiDebug() {
+            UTEST.parseConfig({
+
+            });
         }
 
         private group: eui.Group;
@@ -42,18 +43,12 @@ module test {
             this.group.addChild(this.image);
         }
 
-        // @init
-        public init0() {
-            // 测试set方法
-            UTEST.setDebugMethod("show", Object.getPrototypeOf(this))();
-            this.show = 100;
-        }
-
+        @init
         @bindData(edata)
         public updateData(oldValue, newValue, keyName, obj) {
             this.image.x = edata.offset.tx;
-            UTEST.runDebugMethod("drawDisplayObject", drawDisplayObject('image')); // 标记待测试方法
             console.log(`edata${keyName}更新前${oldValue}更新后${newValue}`);
+            UTEST.runDebugMethod("drawDisplayObject", drawDisplayObject('image')); // 标记待测试方法
         }
     }
 }

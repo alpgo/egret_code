@@ -59597,7 +59597,7 @@ var test;
 var test;
 (function (test) {
     test.edata = test.getBindData({
-        name: '通过数据控制image的图片属性',
+        name: '在控制台中通过数据可以更好的控制image的图片属性或者触发调试工具等',
         offset: {
             tx: 0
         }
@@ -59611,15 +59611,9 @@ var test;
             }, _this);
             return _this;
         }
-        Object.defineProperty(CEUI.prototype, "show", {
-            set: function (value) {
-                if (value > 10) {
-                    console.log(10);
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
+        CEUI.prototype.addEgretEuiDebug = function () {
+            UTEST.parseConfig({});
+        };
         CEUI.prototype.createGroup = function () {
             this.group = new eui.Group();
             this.addChild(this.group);
@@ -59630,17 +59624,14 @@ var test;
             this.image.source = RES.getRes(Assets.main_coin_png);
             this.group.addChild(this.image);
         };
-        // @init
-        CEUI.prototype.init0 = function () {
-            // 测试set方法
-            UTEST.setDebugMethod("show", Object.getPrototypeOf(this))();
-            this.show = 100;
-        };
         CEUI.prototype.updateData = function (oldValue, newValue, keyName, obj) {
             this.image.x = test.edata.offset.tx;
-            UTEST.runDebugMethod("drawDisplayObject", test.drawDisplayObject('image')); // 标记待测试方法
             console.log("edata" + keyName + "\u66F4\u65B0\u524D" + oldValue + "\u66F4\u65B0\u540E" + newValue);
+            UTEST.runDebugMethod("drawDisplayObject", test.drawDisplayObject('image')); // 标记待测试方法
         };
+        __decorate([
+            test.init
+        ], CEUI.prototype, "addEgretEuiDebug", null);
         __decorate([
             test.init
         ], CEUI.prototype, "createGroup", null);
@@ -59648,6 +59639,7 @@ var test;
             test.init
         ], CEUI.prototype, "createImage", null);
         __decorate([
+            test.init,
             test.bindData(test.edata)
         ], CEUI.prototype, "updateData", null);
         return CEUI;
@@ -60037,6 +60029,7 @@ var Main = /** @class */ (function (_super) {
         this.stage.removeChild(this);
     };
     Main.prototype.addEgretEngineDebug = function () {
+        UTEST.setON();
         // 配置数据: 待标记原始方法为可调试方法
         UTEST.parseConfig({
             // 白鹭初始化

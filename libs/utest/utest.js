@@ -2,6 +2,9 @@ var UTEST = (function createUTestLib() {
     // 存储所有配置信息
     var container = {};
 
+    // 启用测试工具(默认无效)
+    var state = false;
+
     // 可追踪调用过程的打印方法
     function printMsgLoc(error, ...args) {
         // 检测参数
@@ -11,14 +14,16 @@ var UTEST = (function createUTestLib() {
         }
         // 分解多行处理
         var lines = error.stack.split('\n');
-        // error.message 输出行数，IF "", 全部输出 { +"10" => 10, 这里+号的作用可将字符串转化为Number类型或者NaN}
-        var count = +error.message || lines.length;
+        // error.message 输出哪些调用位置的行数信息, "1:"表示从第二个开始, ":6"表示从开始到第7个位置结束等.
+        var range = error.message.split(":");
+        var startLine = (+range[0]) || 1;           // 默认从第2行开始显示
+        var endLine = (+range[1]) || lines.length;  // 最后的显示位置的行数
         // 打印的参数信息 {// arguments[1..] 简单的数据输出（数字, 字符串）}
         var message = [].slice.call(arguments, 1).join(" ");
         // 更新第一行数据
         var line0 = lines[0].slice(0, 5) + "\t" + message;
         // 组合多行内容
-        var result = [line0].concat(lines.slice(1, count + 1)).join("\n");
+        var result = [line0].concat(lines.slice(startLine, endLine + 1)).join("\n");
 
         console.log(result);
 
@@ -56,7 +61,7 @@ var UTEST = (function createUTestLib() {
             currentCond: options.cond,
             originFunc: originFunc,
             running: false,
-            run: function () {
+            run: function (position) {
                 var that = this;
                 that.updateOrginMethod(function () {
                     // 注(该库的核心部分): 这里的this才是正在测试函数的调用者
@@ -66,13 +71,14 @@ var UTEST = (function createUTestLib() {
                     if (!cond || cond.apply(this, arguments)) {
                         testFlag = true;
                         printMsgLoc(new Error(), `[method]: ${that.methodKey}`);
+                        position && printMsgLoc(position, "触发该调试的位置");
                         debugger;
                     }
                     var result = that.originFunc.apply(this, arguments);
                     // 虽然支持动态测试,但是不支持多个连续的动态条件设置, 每次函数执行只支持最近一次的动态设置, 然后恢复到静态的配置.(代码确实很蹩脚,实用即可)
                     // 如果已经被测试完, 则立即恢复原函数. 否则, 继续保持待测试状态,等待测试条件满足了,测试完再恢复. 
                     testFlag && that.recoverOrginMethod();
-                    // 当动态设置的条件完成测试后,该恢复静态设置的条件了.
+                    // 当动态设置的条件完成测试后,该恢复静态设置的默认条件了.
                     testFlag && that.recoverDefaultOptions();
                     return result;
                 });
@@ -112,6 +118,9 @@ var UTEST = (function createUTestLib() {
      * @param cond 测试成立条件
      */
     function setDebugMethod(accessKey, target, cond, methodKey) {
+        if (!state) {
+            return function () {};
+        }
         methodKey = methodKey || accessKey;
         if (doesAccessKeyRepeat(accessKey, target, methodKey)) {
             return;
@@ -126,7 +135,7 @@ var UTEST = (function createUTestLib() {
         obj.updateDefaultOptions(cond);
         container[accessKey] = obj;
         return function () {
-            obj.run();
+            obj.run(new Error("2:"));
         };
     }
 
@@ -153,17 +162,28 @@ var UTEST = (function createUTestLib() {
         });
     }
 
-    // 运行已经配置的测试方法(同时可修改其条件)
+    /**
+     * 通过Object.defineProperty()动态修改原始方法, 以待真正运行时, 显示调试位置 ... 
+     * @param {*} accessKey String 调试方法对应的唯一标识符
+     * @param {*} condition Function 通过捕获原始方法的参数, 判断是否显示测试信息
+     */
     function runDebugMethod(accessKey, condition) {
         let obj = container[accessKey];
+        if (!state) {
+            console.warn("UTEST工具没有启用");
+            return;
+        }
         if (!obj) {
             console.warn(`找不到测试方法${accessKey}`);
             return;
         }
         if (condition) {
             setDebugMethod(accessKey, obj.target, condition, obj.methodKey);
+        } else {
+            obj.updateDefaultOptions(null);
         }
-        obj.run();
+        // 传递Error对象, 即可发现该runDebugMethod何时被调用了, 忽略该方法的显示位置
+        obj.run(new Error("2:"));
     }
 
     // 导出方法
@@ -172,5 +192,8 @@ var UTEST = (function createUTestLib() {
     UTEST.parseConfig = parseConfig;
     UTEST.setDebugMethod = setDebugMethod;
     UTEST.runDebugMethod = runDebugMethod;
+    UTEST.setON = function () {
+        state = true;
+    };
     return UTEST;
 }());
