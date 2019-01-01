@@ -1618,7 +1618,8 @@ namespace eui.sys {
          */
         protected invalidateParentLayout(): void {
             let parent = this.$parent;
-            if (!parent || !this.$includeInLayout || !egret.is(parent, UIComponentClass))
+            // if (!parent || !this.$includeInLayout || !egret.is(parent, UIComponentClass))
+            if (!parent || !this.$includeInLayout)
                 return;
             (<eui.UIComponent><any>parent).invalidateSize();
             (<eui.UIComponent><any>parent).invalidateDisplayList();

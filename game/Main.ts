@@ -38,7 +38,7 @@ class Main extends egret.DisplayObjectContainer {
             // 白鹭初始化
             runEgret: egret,
             // 屏幕尺寸计算
-            updateScreenSize: egret.web.WebPlayer.prototype,
+            // updateScreenSize: egret.web.WebPlayer.prototype,
             // 更新舞台尺寸
             updateStageSize: egret.sys.Player.prototype,
             // 舞台Stage的displayList初始化

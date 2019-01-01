@@ -53,6 +53,10 @@ var UTEST = (function createUTestLib() {
     // 封装测试方法
     function createDebugObj(options) {
         let descriptor = Object.getOwnPropertyDescriptor(options.target, options.methodKey);
+        if (!descriptor) {
+            console.warn("配置错误: ", options);
+            return null;
+        }
         let originFunc = descriptor.value || descriptor.set;
         return {
             target: options.target,
@@ -119,7 +123,7 @@ var UTEST = (function createUTestLib() {
      */
     function setDebugMethod(accessKey, target, cond, methodKey) {
         if (!state) {
-            return function () {};
+            return function () { };
         }
         methodKey = methodKey || accessKey;
         if (doesAccessKeyRepeat(accessKey, target, methodKey)) {
@@ -131,6 +135,9 @@ var UTEST = (function createUTestLib() {
             methodKey: methodKey,
             cond: cond
         });
+        if (!obj) {
+            return;
+        }
         // 更新调试参数信息
         obj.updateDefaultOptions(cond);
         container[accessKey] = obj;
