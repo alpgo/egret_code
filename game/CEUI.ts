@@ -8,6 +8,7 @@ module test {
     export let edata = getBindData({
         name: '在控制台中通过数据可以更好的控制image的图片属性或者触发调试工具等',
         width: 0,
+        horizontalCenter: 0,
         offset: {
             tx: 0
         }
@@ -21,7 +22,7 @@ module test {
             }, this);
         }
 
-        // @init
+        @init
         public addEgretEuiDebug() {
             UTEST.parseConfig({
                 // Component
@@ -50,6 +51,7 @@ module test {
                 u_setLayoutBoundsPosition: [eui.sys.UIComponentImpl.prototype, "setLayoutBoundsPosition"],
                 u_getLayoutBounds: [eui.sys.UIComponentImpl.prototype, "getLayoutBounds"],
                 u_getPreferredBounds: [eui.sys.UIComponentImpl.prototype, "getPreferredBounds"],
+                u_invalidateParentLayout: [eui.sys.UIComponentImpl.prototype, "invalidateParentLayout"],
                 // Validator
                 v_invalidateProperties: [eui.sys.Validator.prototype, "invalidateProperties"],
                 v_validateProperties: [eui.sys.Validator.prototype, "validateProperties"],
@@ -59,12 +61,6 @@ module test {
                 v_validateDisplayList: [eui.sys.Validator.prototype, "validateDisplayList"],
                 validateClient: eui.sys.Validator.prototype
             });
-            UTEST.runDebugMethod("invalidateProperties");
-            UTEST.runDebugMethod("invalidateSize");
-            UTEST.runDebugMethod("invalidateDisplayList");
-            UTEST.runDebugMethod("u_invalidateProperties");
-            UTEST.runDebugMethod("u_invalidateSize");
-            UTEST.runDebugMethod("u_invalidateDisplayList");
         }
 
         private group: eui.Group;
@@ -95,7 +91,6 @@ module test {
             this.image.y = 100;
             this.image.horizontalCenter = 0;
             edata.image = this.image;
-            UTEST.runDebugMethod("drawDisplayObject", drawDisplayObject('image')); // 标记待测试方法
         }
 
         @bindData(edata)
@@ -104,9 +99,29 @@ module test {
                 this.image.x = edata.offset.tx;
             } else if (keyName == ".width") {
                 this.group.width = edata.width;
+            } else if (keyName == ".horizontalCenter") {
+                this.image.horizontalCenter = edata.horizontalCenter;
             }
             console.log(`edata${keyName}更新前${oldValue}更新后${newValue}`);
             // UTEST.runDebugMethod("drawDisplayObject", drawDisplayObject('image')); // 标记待测试方法
+        }
+
+        @init
+        utest() {
+            UTEST.setDebugMethod("i_invalidateParentLayout", eui.Image.prototype, null, "invalidateParentLayout")();
+
+            UTEST.runDebugMethod("invalidateProperties");
+            UTEST.runDebugMethod("invalidateSize");
+            UTEST.runDebugMethod("invalidateDisplayList");
+
+            UTEST.runDebugMethod("u_invalidateProperties");
+            UTEST.runDebugMethod("u_invalidateSize");
+            UTEST.runDebugMethod("u_invalidateDisplayList");
+            UTEST.runDebugMethod("u_invalidateParentLayout");
+
+            UTEST.runDebugMethod("v_invalidateProperties");
+            UTEST.runDebugMethod("v_invalidateSize");
+            UTEST.runDebugMethod("v_invalidateDisplayList");
         }
     }
 }

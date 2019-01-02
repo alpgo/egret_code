@@ -75,7 +75,7 @@ var UTEST = (function createUTestLib() {
                     if (!cond || cond.apply(this, arguments)) {
                         testFlag = true;
                         printMsgLoc(new Error(), `[method]: ${that.methodKey}`);
-                        position && printMsgLoc(position, "触发该调试的位置");
+                        // position && printMsgLoc(position, "触发该调试的位置");
                         debugger;
                     }
                     var result = that.originFunc.apply(this, arguments);
@@ -199,6 +199,11 @@ var UTEST = (function createUTestLib() {
     UTEST.parseConfig = parseConfig;
     UTEST.setDebugMethod = setDebugMethod;
     UTEST.runDebugMethod = runDebugMethod;
+    UTEST.runAll = function () {
+        for (var key in container) {
+            container[key].run();
+        }
+    }
     UTEST.setON = function () {
         state = true;
     };

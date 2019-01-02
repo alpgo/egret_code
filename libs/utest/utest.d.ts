@@ -11,6 +11,7 @@ declare namespace UTEST {
     // runDebugMethod会利用配置信息, 通过Object.defineProperty动态修改原始函数, 使得原始函数具备了调试功能
     // 特别地, 此处并没有主动调用了原始函数, 所以该调试工具没有影响被调试原项目的一切逻辑. 只是当原项目中的某个函数被调用了, 会自动触发调试而已. 
     function runDebugMethod(accessKey: string, condition?: Function): void;
+    function runAll();
 }
 
 // [备注] UTEST 与 测试工具的区别: 
